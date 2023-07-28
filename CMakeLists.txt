@@ -171,7 +171,6 @@ install (TARGETS ${POSITTABTARGET} DESTINATION lib) #INTERFACE_INCLUDE_DIRECTORI
 install(DIRECTORY include/ DESTINATION include/cppPosit)
 #install(EXPORT cppPosit DESTINATION lib/cppPosit )
 
-add_subdirectory(doc EXCLUDE_FROM_ALL)
 
 add_subdirectory(examples)
 
