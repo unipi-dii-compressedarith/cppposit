@@ -1,0 +1,28 @@
+#include <iostream>
+#include <cmath>
+#include "../../include/posit_tab.hpp" // include non-tabulated posits
+using namespace std;
+using Xf = posit8;
+typedef Xf myfl;
+
+
+myfl sigmoid(myfl x) {
+	double a = double(x);
+	return 1/(1+std::exp(-a));
+}
+
+
+int main() {
+	myfl a[] = {myfl(0.1f)
+	 ,myfl(0.2f)
+	 ,myfl(0.3f)
+	 ,myfl(0.4f)
+	 ,myfl(0.43f)};
+	cout << "Number   " << "\t" << "Pseudosigmoid  " << "\t" << "Sigmoid  " << "\t" << "Difference   " << "\n";
+	for(int i = 0; i < 5; ++i)
+		cout << double(a[i]) << "|\t" << double(a[i].pseudosigmoid()) << "|\t" << double(sigmoid(a[i])) << "|\t" << double(sigmoid(a[i]))-double(a[i].pseudosigmoid())<< "\n";
+	for(int i = 0; i < 5; ++i)
+		cout << double(-a[i]) << "|\t" << double((-a[i]).pseudosigmoid()) << "|\t" << double(sigmoid(-a[i])) << "|\t" << double(sigmoid(-a[i]))-double((-a[i]).pseudosigmoid())<< "\n";
+	return 0;
+	
+}
