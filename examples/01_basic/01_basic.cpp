@@ -8,7 +8,7 @@ using namespace posit;
 
 int main() {
     Posit<int32_t, 32, 2, uint32_t, PositSpec::WithInfs> One(1);
-    Posit<int32_t, 32, 2, uint32_t, PositSpec::WithInfs> Tiny(0.125);
+    Posit<int32_t, 32, 2, uint32_t, PositSpec::WithInfs> Tiny(0.00000000000000003);
     auto ot = One - Tiny;
     auto eps = One - One.prev();
     printf("One val:\t %.23f\n", (double)One);
