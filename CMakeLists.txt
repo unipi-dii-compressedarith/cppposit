@@ -23,7 +23,7 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall -Wno-long-long   -pedantic")
 endif()
 
-add_definitions(--std=c++17)
+add_definitions(--std=c++2b)
 
 
 option(SOFTFLOAT "softfloat" TRUE)

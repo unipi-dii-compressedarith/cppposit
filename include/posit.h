@@ -949,7 +949,11 @@ namespace posit
 
 	    friend CONSTEXPR14 Posit operator+(const Posit & a, const Posit & b)
 	    {
-	        return a.is_zero() ? b : b.is_zero() ? a: pack_posit<T,totalbits,esbits,FT,positspec>(a.to_backend()+b.to_backend());
+            auto ab = a.to_backend();
+            auto bb = b.to_backend();
+            auto rb = ab+bb;
+            auto res = pack_posit<T,totalbits,esbits,FT,positspec>(rb);
+	        return a.is_zero() ? b : b.is_zero() ? a: res;
 	    }
 
 

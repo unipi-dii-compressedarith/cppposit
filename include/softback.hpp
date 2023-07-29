@@ -289,6 +289,7 @@ struct Unpacked {
   CONSTEXPR14 friend Unpacked operator+(Unpacked a, Unpacked b) {
     // UnpackedDualSel(*,NaN)
     // UnpackedDualSel(NaN,*)
+    constexpr POSIT_LUTYPE maxShift = sizeof(POSIT_LUTYPE)*8 - 1;
     if (a.isNaN() || b.isNaN()) return a;
     switch (UnpackedDualSel(a.type, b.type)) {
       case UnpackedDualSel(Type::Regular, Type::Regular): {
@@ -303,9 +304,9 @@ struct Unpacked {
             (a.fraction >> 2);  // denormalized and shifted right
         POSIT_LUTYPE bfrac1 = (FT_leftmost_bit >> 1) | (b.fraction >> 2);
         POSIT_LUTYPE afrac = dir < 0
-                                 ? (afrac1 >> -dir)
+                                 ? (afrac1 >> std::min<POSIT_LUTYPE>(-dir,maxShift))
                                  : afrac1;  // denormalized and shifted right
-        POSIT_LUTYPE bfrac = dir < 0 ? bfrac1 : (bfrac1 >> dir);
+        POSIT_LUTYPE bfrac = dir < 0 ? bfrac1 : (bfrac1 >> std::min<POSIT_LUTYPE>(dir,maxShift));
 
         // 1.xxxx => 0.1xxxxx => 0.0k 1 xxxx
         //
