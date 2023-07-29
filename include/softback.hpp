@@ -45,10 +45,6 @@ template <class FT = uint64_t, class ET = int32_t>
 struct Unpacked {
   using fraction_type = FT;
   using exponent_type = ET;
-  static_assert(std::is_unsigned<FT>::value,
-                "Unpacked requires unsigned fractiont type or floating");
-  static_assert(std::is_signed<ET>::value,
-                "Unpacked requires signed exponent type");
   using POSIT_LUTYPE = FT;
   enum { FT_bits = sizeof(FT) * 8 };
   enum : FT { FT_leftmost_bit = (((FT)1) << (FT_bits - 1)) };

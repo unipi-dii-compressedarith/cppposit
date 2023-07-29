@@ -1171,7 +1171,7 @@ namespace posit
 		}
 		else if(f == std::ios::oct)
 		{
-			ons << o.to_backend();
+			//ons << o.to_backend();
 		}	
 		// reset
 		ons.setf(af & std::ios::basefield, std::ios::basefield);
@@ -1482,7 +1482,7 @@ namespace posit
 	 * @return CONSTEXPR14 abs 
 	 */
 	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
-	inline CONSTEXPR14 Posit<T,totalbits,esbits,FT,positspec> abs(const Posit<T,totalbits,esbits,FT,positspec> & z) 
+	inline CONSTEXPR14 Posit<T,totalbits,esbits,FT,positspec> __abs(const Posit<T,totalbits,esbits,FT,positspec> & z) 
 	{
 		return Posit<T,totalbits,esbits,FT,positspec>::from_sraw(pcabs(z.v));
 	}
@@ -1526,7 +1526,7 @@ namespace std
 	template <class T,int totalbits, int esbits, class FT, posit::PositSpec positspec>
 	inline CONSTEXPR14 posit::Posit<T,totalbits,esbits,FT,positspec> abs(posit::Posit<T,totalbits,esbits,FT,positspec> a)
 	{
-		return posit::math::abs(a);
+		return posit::__abs(a);
 	}
 
 	/*template <class T,int totalbits, int esbits, class FT, posit::PositSpec positspec>
@@ -1669,6 +1669,13 @@ namespace std
 		using PP = posit::Posit<T,totalbits,esbits,FT,positspec>;
 		return (PP)std::atanh((float)a);
 	}		
+
+	template <class T,int totalbits, int esbits, class FT, posit::PositSpec positspec>
+	constexpr posit::Posit<T,totalbits,esbits,FT,positspec> isfinite(const posit::Posit<T,totalbits,esbits,FT,positspec>& a)
+	{
+		using PP = posit::Posit<T,totalbits,esbits,FT,positspec>;
+		return (PP)std::isfinite((float)a);
+	}	
 
 
 
