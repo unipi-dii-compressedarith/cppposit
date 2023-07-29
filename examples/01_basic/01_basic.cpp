@@ -7,9 +7,9 @@ using namespace std;
 using namespace posit;
 
 int main() {
-    Posit<int32_t, 32, 2, uint64_t, PositSpec::WithInfs> One(1);
-    Posit<int32_t, 32, 2, uint64_t, PositSpec::WithInfs> Tiny(0.000000000000000000000003);
-    auto Min = Posit<int32_t, 32, 2, uint64_t, PositSpec::WithInfs>::from_sraw(1);
+    Posit<int32_t, 32, 2, uint32_t, PositSpec::WithInfs> One(1);
+    Posit<int32_t, 32, 2, uint32_t, PositSpec::WithInfs> Tiny(0.00000000000000003);
+    auto Min = Posit<int32_t, 32, 2, uint32_t, PositSpec::WithInfs>::from_sraw(1);
     auto ot = One - Tiny;
     auto eps = One - One.prev();
     printf("One val:\t %.23f\n", (double)One);

@@ -10,6 +10,7 @@
 #pragma once
 #include"softback.hpp"
 #include <complex>
+#include <iostream>
 #ifdef POSIT_VALUE_LOGGER
 #include "interface/logger/logger.hpp"
 #endif
@@ -1305,11 +1306,18 @@ namespace posit
 	    POSIT_UTYPE regbits = reg < 0 ? (PT::POSIT_HOLDER_MSB >> -reg) : (PT::POSIT_MASK << (PT::POSIT_HOLDER_SIZE-(reg+1))); // reg+1 bits on the left
 		POSIT_UTYPE eexp = msb_exp<POSIT_UTYPE,PT::POSIT_HOLDER_SIZE,esbits,(esbits == 00)>()(exp);
 		POSIT_UTYPE fraction =  x.fraction;
-		POSIT_STYPE p = ((fraction >> (rs+es+1)) | (eexp >> (rs+1)) | (regbits>>1)) >> (sizeof(T)*8-totalbits);
-		//std::cout << "incoming " << x << std::endl;
-		//std::cout << "fraction before " << std::bitset<sizeof(FT)*8>(x.fraction) << " and " << " after " << std::bitset<sizeof(POSIT_UTYPE)*8>(fraction) << " residual exponent " << exp << " from " << eexponent <<  " and regime " << reg << std::endl;
-		//std::cout << "output sign " << std::bitset<sizeof(T)*8>(p) << " then " << std::bitset<sizeof(T)*8>(-p) << std::endl; 
-	    return PP(typename PP::DeepInit(),x.negativeSign ? -p : p);
+        POSIT_UTYPE pf = fraction >> (rs+es+1);
+        POSIT_UTYPE pf_rem = fraction % (1<<(rs+es+1));
+        POSIT_UTYPE pe = (eexp >> (rs+1));
+        POSIT_UTYPE pr = (regbits>>1) >> (sizeof(T)*8-totalbits);
+        POSIT_STYPE p = pf | pe | pr;
+
+	    auto retp =  PP(typename PP::DeepInit(),x.negativeSign ? -p : p);
+
+        constexpr POSIT_UTYPE sticky = sizeof(POSIT_UTYPE)*4-1;
+
+        if(pf_rem >= sticky) return retp.next();
+        return retp;
 	}
 
 	/**
