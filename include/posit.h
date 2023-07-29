@@ -9,6 +9,7 @@
  */
 #pragma once
 #include"softback.hpp"
+
 #include <complex>
 #include <iostream>
 #ifdef POSIT_VALUE_LOGGER
@@ -1279,7 +1280,7 @@ namespace posit
 	    using PT=typename Posit<T,totalbits,esbits,FT,positspec>::PT;
 	    using POSIT_UTYPE = typename PT::POSIT_UTYPE;
 	    using POSIT_STYPE = typename PT::POSIT_STYPE;
-
+        constexpr POSIT_UTYPE maxShift = sizeof(POSIT_UTYPE)*8 - 1;
 	    switch(x.type)
 		{
 			case NumberType::Infinity:
@@ -1302,12 +1303,12 @@ namespace posit
 	    auto rs = -reg+1 > reg+2 ? -reg+1:reg+2; //std::max(-reg + 1, reg + 2);  MSVC issue
 	    auto es = (totalbits-rs-1) < esbits ? (totalbits-rs-1): esbits; //std::min((int)(totalbits-rs-1),(int)esbits);  MSVC issue
 	    
-
+        auto rses_shift = std::min<POSIT_UTYPE>(maxShift,rs+es+1);
 	    POSIT_UTYPE regbits = reg < 0 ? (PT::POSIT_HOLDER_MSB >> -reg) : (PT::POSIT_MASK << (PT::POSIT_HOLDER_SIZE-(reg+1))); // reg+1 bits on the left
 		POSIT_UTYPE eexp = msb_exp<POSIT_UTYPE,PT::POSIT_HOLDER_SIZE,esbits,(esbits == 00)>()(exp);
 		POSIT_UTYPE fraction =  x.fraction;
-        POSIT_UTYPE pf = fraction >> (rs+es+1);
-        POSIT_UTYPE pf_rem = fraction % (1<<(rs+es+1));
+        POSIT_UTYPE pf = (rses_shift == maxShift)? 0: fraction >> rses_shift;
+        POSIT_UTYPE pf_rem = (pf == 0)? 0:fraction % (1u<<rses_shift);
         POSIT_UTYPE pe = (eexp >> (rs+1));
         POSIT_UTYPE pr = (regbits>>1) >> (sizeof(T)*8-totalbits);
         POSIT_STYPE p = pf | pe | pr;

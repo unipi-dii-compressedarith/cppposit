@@ -6,6 +6,8 @@ using namespace std;
 #include "../../include/posit.h" // include non-tabulated posits
 using namespace posit;
 
+
+
 int main() {
     Posit<int32_t, 32, 2, uint32_t, PositSpec::WithInfs> One(1);
     Posit<int32_t, 32, 2, uint32_t, PositSpec::WithInfs> Tiny(0.00000000000000003);
