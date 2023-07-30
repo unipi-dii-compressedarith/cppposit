@@ -1,17 +1,11 @@
 /**
- * Copyright (C) 2017-2019 Emanuele Ruffaldi
- * Distributed under the terms of the BSD 3-Clause License.
- *
+ * Copyright (C) 2017-2023 Emanuele Ruffaldi, Federico Rossi
+ * 
+ * Distributed under the terms of the BSD 3-Clause License.  
+ * 
  * (See accompanying file LICENSE)
- *
+ * 
  * --
- */
-/**
- * Emanuele Ruffaldi (C) 2017-2018
- *
- * cppPosit project
- * gneralized soft float in unpackd form
- *
  */
 #pragma once
 
@@ -350,18 +344,11 @@ struct Unpacked {
         POSIT_LUTYPE afrac = FT_leftmost_bit | (a.fraction >> 1);
         POSIT_LUTYPE bfrac = FT_leftmost_bit | (b.fraction >> 1);
         auto frac = nextintop<FT>::extramul(afrac, bfrac) >> FT_bits;
-#ifdef FPGAHLS
-#pragma HLS RESOURCE variable = frac core = Mul_LUT
-#endif
+
         bool q = (frac & FT_leftmost_bit) == 0;
         auto rfrac = q ? (frac << 1) : frac;
         auto exp = a.exponent + b.exponent + (q ? 0 : 1);
-#if 0
-                  if ((frac & FT_leftmost_bit) == 0) {
-                      exp--;
-                      frac <<= 1;
-                  }
-#endif
+
         return Unpacked(exp, rfrac << 1, a.negativeSign ^ b.negativeSign);
       }
       case UnpackedDualSel(Type::Regular, Type::Zero):
@@ -394,12 +381,6 @@ struct Unpacked {
           POSIT_LUTYPE bfrac1 = FT_leftmost_bit | (b.fraction >> 1);
           auto exp = a.exponent - b.exponent + (afrac < bfrac1 ? -1 : 0);
           POSIT_LUTYPE bfrac = afrac < bfrac1 ? (bfrac1 >> 1) : bfrac1;
-          /* CHECK
-            if (afrac < bfrac) {
-                exp--;
-                bfrac >>= 1;
-            }
-          */
           return Unpacked(
               exp,
               nextintop<FT>::extradiv(
@@ -422,7 +403,6 @@ struct Unpacked {
     }
   }
 
-#ifndef FPGAHLS
   /**
    * Prints the Soft float only for non-FPGA target
    * @param ons stream
@@ -451,7 +431,6 @@ struct Unpacked {
     }
     return ons;
   }
-#endif
 };
 
 
@@ -500,23 +479,10 @@ CONSTEXPR14 Unpacked<FT, ET> &Unpacked<FT, ET>::unpack_xfloati(
   exponent = rawexp - Trait::exponent_bias;  // ((un.u >> Trait::fraction_bits)
                                              // & Trait::exponent_mask)
 
-  // std::cout  << "un.u is " << std::hex <<un.u << " for " << value <<
-  // std::endl;  std::cout << std::dec << "float trait: fraction bits " <<
-  // Trait::fraction_bits << " exponent bits " << Trait::exponent_bits << " bias
-  // " << Trait::exponent_bias << " mask " << std::hex << Trait::exponent_mask<<
-  // std::endl;  std::cout << std::hex << "exponent output " << std::hex <<
-  // exponent  << " " << std::dec << exponent << " fraction " << std::hex <<
-  // fraction << std::endl;
-
   // fractional part is LSB of the holder_t and of length
   fraction = cast_right_to_left<typename Trait::holder_t, Trait::fraction_bits,
                                 FT, FT_bits>()(value);
 
-  // if(FT_bits < Trait::fraction_bits)
-  //	fraction = bitset_getT(value,0,Trait::fraction_bits) >>
-  //(Trait::fraction_bits-FT_bits);  else 	fraction =
-  //((POSIT_LUTYPE)bitset_getT(value,0,Trait::fraction_bits)) <<
-  //(FT_bits-Trait::fraction_bits);
 
   // stored exponent: 0, x, exponent_mask === 0, any, infinity
   // biased: -max, -max+1, ..., max, max+1 === 0, min, ..., max, infinity
@@ -538,9 +504,6 @@ CONSTEXPR14 Unpacked<FT, ET> &Unpacked<FT, ET>::unpack_xfloati(
       int k = findbitleftmostC(fraction);
       exponent -= k;
       fraction <<= (k + 1);
-      // std::cout << typeid(Trait).name() << "unpacking: denormalized
-      // (rawexp=0,fraction=" <<  (int)tmp << ") unpacked as  (exp=" << exponent
-      // << ",fraction=" << (int)fraction << ")"<< std::endl;
     }
   }
   return *this;
@@ -667,9 +630,6 @@ CONSTEXPR14 typename Trait::holder_t Unpacked<FT, ET>::pack_xfloati() const {
                                        FT_leftmost_bit>::packdenorm(fraction);
       // use denormalization
       ffracbits >>= -fexp;
-      // std::cout << typeid(Trait).name()<< "pack - denormalized (exp=" <<
-      // exponent << ",fraction=" << (int)fraction << ") means rawexp=" << fexp
-      // << " results in fraction=" << (int)ffracbits << "\n";
     }
   } else  // normal
   {
@@ -716,39 +676,5 @@ struct lightfixed {
   value_t v;
 };
 
-#if 0
-#ifndef FPGAHLS
 
-  template <class ET>
-  struct Unpacked<float,ET>
-  {
-
-    struct single_tag
-    {
-    };
-
-    enum Type
-    {
-      Regular,
-      Infinity,
-      NaN,
-      Zero
-    }; /// signed infinity and nan require the extra X bit
-
-    float v;
-
-    Unpacked() : v(0) {}
-    Unpacked(float f) : v(f) {}
-
-    Unpacked(double f): v(f) {}
-
-    Unpacked(int f): v(f) {}
-
-    friend Unpacked operator+ (const Unpacked &a, const Unpacked & b) { return Unpacked(a.v+b.v); }
-    friend Unpacked operator- (const Unpacked &a, const Unpacked & b) { return Unpacked(a.v-b.v); }
-    friend Unpacked operator/ (const Unpacked &a, const Unpacked & b) { return Unpacked(a.v/b.v); }
-    friend Unpacked operator* (const Unpacked &a, const Unpacked & b) { return Unpacked(a.v*b.v); }
-  };
-#endif
-#endif
 }  // namespace posit

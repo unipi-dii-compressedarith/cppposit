@@ -1,17 +1,13 @@
 /**
- * Copyright (C) 2017-2019 Emanuele Ruffaldi
+ * Copyright (C) 2017-2023 Emanuele Ruffaldi, Federico Rossi
+ * 
  * Distributed under the terms of the BSD 3-Clause License.  
  * 
  * (See accompanying file LICENSE)
  * 
  * --
  */
-// anyfloat_emu: any_floattrait + real float/double + UnpackedT encode/decode ~= 
-//
-// for the case of binary16 see float16native32 based on F16C
-//
-// TODO anyfloat non emu: missing comparision function of UnpackedT
-// TODO testing of the converrsion functions
+
 #pragma once
 #include <cmath>
 #include <iostream>

@@ -6,6 +6,7 @@
  * 
  * --
  */
+
 #pragma once
 #include "posit.h"
 #ifdef POSIT_EIGEN

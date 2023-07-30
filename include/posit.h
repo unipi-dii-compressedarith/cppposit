@@ -7,6 +7,7 @@
  * 
  * --
  */
+
 #pragma once
 #include <backends/softback.hpp>
 #include <traits/posittraits.hpp>
