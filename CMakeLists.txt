@@ -7,15 +7,12 @@ add_definitions (-D__arm__ )
 ENDIF()
 
 if(MSVC)
-  # Force to always compile with W4
   if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
     string(REGEX REPLACE "/W[0-4]" /WX "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
   else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /WX")
   endif()
 else()
-  # Update if necessary
-  #-Wno-int-in-bool-context
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror -Wall -Wno-long-long   -pedantic")
 endif()
 
