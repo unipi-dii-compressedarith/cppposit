@@ -908,7 +908,7 @@ namespace posit
 	{
 		using PP=Posit<T,totalbits,esbits,FT,positspec>;
 		using BE=typename Posit<T,totalbits,esbits,FT,positspec>::BackendT;
-		using PPEMU=Posit<T, totalbits,esbits, make_unsigned_t<T>,positspec>;
+		using PPEMU=Posit<T, totalbits,esbits, std::make_unsigned_t<T>,positspec>;
 
 		if constexpr (std::is_base_of<BE, BackendXPosit<T,PPEMU>>::value)
 			return PP::from_sraw(x.v);
@@ -933,7 +933,7 @@ namespace posit
 		using PP=Posit<T,totalbits,esbits,FT,positspec>;
 
 		using BE=typename Posit<T,totalbits,esbits,FT,positspec>::BackendT;
-		using PPEMU=Posit<T, totalbits,esbits, make_unsigned_t<T>,positspec>;
+		using PPEMU=Posit<T, totalbits,esbits, std::make_unsigned_t<T>,positspec>;
 
 		if constexpr (std::is_base_of<BE, BackendXPosit<T,PPEMU>>::value)
 			return BE({},p.v);
