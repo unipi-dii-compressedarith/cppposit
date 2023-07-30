@@ -1,0 +1,10 @@
+[project]
+name = "cppposit"
+version = "1.0.0"
+
+# Optional, adding this will enable direct links from the documentation
+# to your source code.
+
+[paths]
+compile_commands = "build/compile_commands.json"
+output_dir = "cppposit_docs/"
