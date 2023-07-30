@@ -24,8 +24,8 @@
 #include <limits>
 #include <ratio>
 #include "bithippop.hpp"
-#include "fixedtraits.hpp"
-#include "floattraits.hpp"
+#include <traits/fixedtraits.hpp>
+#include <traits/floattraits.hpp>
 #include "typehelpers.hpp"
 
 namespace posit {
