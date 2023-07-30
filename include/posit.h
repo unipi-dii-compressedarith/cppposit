@@ -13,10 +13,12 @@
 #include <traits/posittraits.hpp>
 #include <backends/fixed.hpp>
 #include <backends/float.hpp>
+#include <backends/xpositback.hpp>
 #include <backends/unpacked.hpp>
 #include <interface/std/std.hpp>
 #include <complex>
 #include <iostream>
+#include <typeinfo>
 
 #ifdef POSIT_VALUE_LOGGER
 #include "interface/logger/logger.hpp"
@@ -631,7 +633,7 @@ namespace posit
 		ons.setf(std::ios::dec, std::ios::basefield);
 		if(f == std::ios::hex)
 		{
-			ons << o.v;
+			ons << std::hex << o.v;
 		}
 		else if(f == std::ios::dec)
 		{
@@ -905,11 +907,17 @@ namespace posit
 	CONSTEXPR14 Posit<T,totalbits,esbits,FT,positspec> pack_posit(const typename Posit<T,totalbits,esbits,FT,positspec>::BackendT & x)
 	{
 		using PP=Posit<T,totalbits,esbits,FT,positspec>;
-		return PP::pack_low(PP::unpacked_full2low(x));
+		using BE=typename Posit<T,totalbits,esbits,FT,positspec>::BackendT;
+		using PPEMU=Posit<T, totalbits,esbits, make_unsigned_t<T>,positspec>;
+
+		if constexpr (std::is_base_of<BE, BackendXPosit<T,PPEMU>>::value)
+			return PP::from_sraw(x.v);
+		else
+			return PP::pack_low(PP::unpacked_full2low(x));
 	}
 	
 	/**
-	 * @brief Unpack from Backend to Posit passing throught the Unpacked form
+	 * @brief Unpack from Posit to Backend passing throught the Unpacked form
 	 * 
 	 * @tparam T 
 	 * @tparam totalbits 
@@ -917,12 +925,19 @@ namespace posit
 	 * @tparam FT 
 	 * @tparam positspec 
 	 * @param x 
-	 * @return CONSTEXPR14 pack_posit 
+	 * @return CONSTEXPR14 unpack_posit 
 	 */
 	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
 	CONSTEXPR14 auto unpack_posit(const Posit<T,totalbits,esbits,FT,positspec> & p) -> typename Posit<T,totalbits,esbits,FT,positspec>::BackendT 
 	{
 		using PP=Posit<T,totalbits,esbits,FT,positspec>;
+
+		using BE=typename Posit<T,totalbits,esbits,FT,positspec>::BackendT;
+		using PPEMU=Posit<T, totalbits,esbits, make_unsigned_t<T>,positspec>;
+
+		if constexpr (std::is_base_of<BE, BackendXPosit<T,PPEMU>>::value)
+			return BE({},p.v);
+		else
 		return PP::unpacked_low2full(p.unpack_low());
 	}
 
