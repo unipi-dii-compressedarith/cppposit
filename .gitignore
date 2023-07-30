@@ -43,6 +43,6 @@ build_/
 .vscode/
 # build folder
 doc/build/
-
+cppposit_docs/
 # file for developers
 my_*.*
