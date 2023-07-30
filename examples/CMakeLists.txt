@@ -13,9 +13,6 @@ ENDMACRO()
 
 SUBDIRLIST(SUBDIRS ${CMAKE_CURRENT_SOURCE_DIR})
 
-#list(APPEND TAB_POSIT_LIB8 ${CMAKE_SOURCE_DIR}/src/posit8_tbl.cpp ${CMAKE_SOURCE_DIR}/src/posit8.cpp)
-#list(APPEND TAB_POSIT_LIB12 ${CMAKE_SOURCE_DIR}/src/posit12_tbl.cpp ${CMAKE_SOURCE_DIR}/src/posit12.cpp)
-#list(APPEND TAB_POSIT_LIB10 ${CMAKE_SOURCE_DIR}/src/posit10_tbl.cpp ${CMAKE_SOURCE_DIR}/src/posit10.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
 FOREACH(subdir ${SUBDIRS})
