@@ -34,8 +34,8 @@ struct int_least_helper {};
 #ifdef HAS128T
 template <>
 struct int_least_helper<1> {
-  typedef __int128 signed_type;
-  typedef unsigned __int128 unsigned_type;
+  __extension__ typedef __int128 signed_type;
+  __extension__ typedef unsigned __int128 unsigned_type;
 };
 #endif
 template <>
@@ -100,7 +100,7 @@ struct nextinttype {
 
 template <>
 struct nextinttype<uint64_t> {
-  using type = unsigned __int128;
+  __extension__ using type = unsigned __int128;
 };
 
 template <>
@@ -121,7 +121,7 @@ struct nextinttype<uint8_t> {
 template <>
 struct nextinttype<int64_t>
 {
-	using type = __int128;
+	__extension__ using type = __int128;
 };
 
 template <>
