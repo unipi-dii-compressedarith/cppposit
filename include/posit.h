@@ -506,19 +506,23 @@ namespace posit
 
 		constexpr operator float() const { return to_backend(); }
 		constexpr operator double() const { return to_backend(); }
-		constexpr operator int() const { return (int)to_backend(); }
-		constexpr operator long() const { return (int)to_backend(); }
+		
+		constexpr operator short int() const { return to_backend();}
+		constexpr operator int() const { return to_backend(); }
+		constexpr operator long() const { return to_backend(); }
+		constexpr operator long long int() const { return to_backend();}		
+
+		constexpr operator short unsigned int() const { return to_backend();}
+		constexpr operator unsigned int() const { return to_backend();}
+		constexpr operator long unsigned int() const { return to_backend();}		
+		constexpr operator long long unsigned int() const { return to_backend();}		
+
+
 		constexpr operator bool() const { return !is_zero();}
 		constexpr operator std::complex<float>() const {return std::complex<float>((float)to_backend());}
 		constexpr operator std::complex<double>() const {return std::complex<float>((float)to_backend());}
 		constexpr operator unsigned char() const { return (int)to_backend();}
 		constexpr operator signed char() const { return (int)to_backend();}
-		constexpr operator short unsigned int() const { return (int)to_backend();}
-		constexpr operator short int() const { return (int)to_backend();}
-		constexpr operator unsigned int() const { return (int)to_backend();}
-		constexpr operator long unsigned int() const { return (int)to_backend();}		
-		constexpr operator long long unsigned int() const { return (int)to_backend();}		
-		constexpr operator long long int() const { return (int)to_backend();}		
 
 		
 		constexpr bool operator==(double d) {

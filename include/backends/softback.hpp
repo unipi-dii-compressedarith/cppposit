@@ -71,12 +71,12 @@ struct Unpacked {
   }
 
   explicit CONSTEXPR14 Unpacked(halffloat p) { unpack_half(p); }
-  explicit CONSTEXPR14 Unpacked(int i) { unpack_int(i); }
-  explicit CONSTEXPR14 Unpacked(unsigned int i) { unpack_int(i); }
-  explicit CONSTEXPR14 Unpacked(long int i) { unpack_int(i); }
-  explicit CONSTEXPR14 Unpacked(long long int i) { unpack_int(i); }
-  explicit CONSTEXPR14 Unpacked(long unsigned int i) { unpack_int(i); }
-  explicit CONSTEXPR14 Unpacked(long long unsigned int i) { unpack_int(i); }
+  explicit CONSTEXPR14 Unpacked(int i) { unpack_xfixed<fixedtrait<int, sizeof(int) * 8, 0>>(i); }
+  explicit CONSTEXPR14 Unpacked(unsigned int i) { unpack_xfixed<fixedtrait<unsigned int, sizeof(unsigned int) * 8, 0>>(i); }
+  explicit CONSTEXPR14 Unpacked(long int i) { unpack_xfixed<fixedtrait<long int, sizeof(long int) * 8, 0>>(i); }
+  explicit CONSTEXPR14 Unpacked(long long int i) { unpack_xfixed<fixedtrait<long long int, sizeof(long long int) * 8, 0>>(i); }
+  explicit CONSTEXPR14 Unpacked(long unsigned int i) { unpack_xfixed<fixedtrait<long unsigned int, sizeof(long unsigned int) * 8, 0>>(i); }
+  explicit CONSTEXPR14 Unpacked(long long unsigned int i) { unpack_xfixed<fixedtrait<long long unsigned int, sizeof(long long unsigned int) * 8, 0>>(i); }
 
   explicit CONSTEXPR14 Unpacked(Type t, bool anegativeSign = false)
       : type(t), negativeSign(anegativeSign){};
@@ -121,9 +121,16 @@ struct Unpacked {
   }
 
   constexpr operator halffloat() const { return pack_xfloat<half_trait>(); }
-  constexpr operator int() const {
-    return pack_xfixed<fixedtrait<int, sizeof(int) * 8, 0>>();
-  }
+
+  constexpr operator int() const { return pack_xfixed<fixedtrait<int, sizeof(int) * 8, 0>>(); }
+  constexpr operator long int() const { return pack_xfixed<fixedtrait<long int, sizeof(long int) * 8, 0>>(); }
+  constexpr operator long long int() const { return pack_xfixed<fixedtrait<long long int, sizeof(long long int) * 8, 0>>(); }
+  constexpr operator unsigned int() const { return pack_xfixed<fixedtrait<unsigned int, sizeof(unsigned int) * 8, 0>>(); }
+  constexpr operator unsigned long int() const { return pack_xfixed<fixedtrait<unsigned long int, sizeof(unsigned long int) * 8, 0>>(); }
+  constexpr operator unsigned long long int() const { return pack_xfixed<fixedtrait<unsigned long long int, sizeof(unsigned long long int) * 8, 0>>(); }
+
+
+
 
   template <class Trait>
   CONSTEXPR14 typename Trait::holder_t pack_xfloati() const;

@@ -33,6 +33,9 @@ namespace posit {
 		BackendFixed(raw_tag, value_t x) : v(x) {}
 		BackendFixed(single_tag, uint32_t x): BackendFixed(OBE::template make_floati<single_trait>(x)) {}
 		BackendFixed(int x) : BackendFixed(OBE(x))  {}
+		BackendFixed(long int x) : BackendFixed(OBE(x))  {}
+		BackendFixed(long long int x) : BackendFixed(OBE(x))  {}
+
 		BackendFixed(float x) : BackendFixed(OBE(x)) {}
 		BackendFixed(double x) : BackendFixed(OBE(x))  {}
 		BackendFixed(OBE u): v(u.template pack_xfixed<FT>()) {}
@@ -46,6 +49,8 @@ namespace posit {
 		constexpr operator float () const { return OBE::template make_fixed<FT>(v);}
 		constexpr operator double () const { return OBE::template make_fixed<FT>(v);}
 		constexpr operator int () const { return OBE::template make_fixed<FT>(v);}
+		constexpr operator long int () const { return OBE::template make_fixed<FT>(v);}
+		constexpr operator long long int () const { return OBE::template make_fixed<FT>(v);}
 
 	 	BackendFixed operator + (BackendFixed o) const { return fromraw(v+o.v); }
 		BackendFixed operator * (BackendFixed o) const { return fromraw(v*o.v); }

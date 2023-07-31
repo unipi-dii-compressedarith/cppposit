@@ -29,6 +29,10 @@ namespace posit {
 		BackendFloat(single_tag, uint32_t x): v(uint32_to_float(x)) {}
 		BackendFloat(int x) : v(x) {}
 		BackendFloat(long x) : v(x) {}
+		BackendFloat(long long int x) : v(x) {}
+		BackendFloat(unsigned int x) : v(x) {}
+		BackendFloat(unsigned long x) : v(x) {}
+		BackendFloat(unsigned long long int x) : v(x) {}
 		BackendFloat(float x) : v(x) {}
 		BackendFloat(double x) : v(x) {}
 
@@ -38,7 +42,11 @@ namespace posit {
 		constexpr operator float () const {return (float)v;}
 		constexpr operator double () const {return (double)v;}
 		constexpr operator int () const {return (int)v;}
-		constexpr operator long () const {return (long)v;}
+		constexpr operator long int () const {return (long)v;}
+		constexpr operator long long int () const {return (long long int)v;}
+		constexpr operator unsigned int () const {return (unsigned int)v;}
+		constexpr operator unsigned long int () const {return (unsigned long int)v;}
+		constexpr operator unsigned long long int () const {return (unsigned long long int)v;}
 
 	 	BackendFloat operator + (BackendFloat o) const { return BackendFloat(v+o.v); }
 		BackendFloat operator * (BackendFloat o) const { return BackendFloat(v*o.v); }
