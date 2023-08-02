@@ -1,6 +1,9 @@
   
 # cppposit
 
+[Emanuele Ruffaldi](https://github.com/eruffaldi)
+[Federico Rossi](https://github.com/federicorossifr)
+
 Implementation of John L. Gustafson Unum Type III aka Posits using C++ Templates.
 
 Initial inspiration was the existing C++ [](Implementation of Gustafoson Unum Type III aka Posits using C++ Templates.
