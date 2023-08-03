@@ -5,6 +5,13 @@ version = "1.0.0"
 # Optional, adding this will enable direct links from the documentation
 # to your source code.
 
+[pages]
+homepage="docs/getting_started.md"
+paths = [
+    "docs/Examples.md",
+    "docs/Backends.md"
+]
+
 [paths]
 compile_commands = "build/compile_commands.json"
 output_dir = "cppposit_docs/"
