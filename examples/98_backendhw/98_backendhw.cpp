@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-#include <posit.h> // include non-tabulated posits
+#include <posit.h>
 using namespace posit;
 #include <iomanip>
 

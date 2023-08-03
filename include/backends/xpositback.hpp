@@ -13,7 +13,7 @@ namespace posit {
 	struct is_posit_backend;
 
 	template <class T,class PositEmu>
-	struct BackendXPosit
+	struct BackendXPosit: public HwBaseBackend
 	{
 		struct single_tag{};
 

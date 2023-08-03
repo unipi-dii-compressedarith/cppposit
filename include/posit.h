@@ -13,8 +13,10 @@
 #include <traits/posittraits.hpp>
 #include <backends/fixed.hpp>
 #include <backends/float.hpp>
+#include <backends/hwbaseback.hpp>
 #include <backends/xpositback.hpp>
 #include <backends/unpacked.hpp>
+#include <backends/ptaback.hpp>
 #include <interface/std/std.hpp>
 #include <complex>
 #include <iostream>
@@ -912,9 +914,8 @@ namespace posit
 	{
 		using PP=Posit<T,totalbits,esbits,FT,positspec>;
 		using BE=typename Posit<T,totalbits,esbits,FT,positspec>::BackendT;
-		using PPEMU=Posit<T, totalbits,esbits, std::make_unsigned_t<T>,positspec>;
 
-		if constexpr (std::is_base_of<BE, BackendXPosit<T,PPEMU>>::value)
+		if constexpr (std::is_base_of<HwBaseBackend, BE>::value)
 			return PP::from_sraw(x.v);
 		else
 			return PP::pack_low(PP::unpacked_full2low(x));
@@ -937,9 +938,8 @@ namespace posit
 		using PP=Posit<T,totalbits,esbits,FT,positspec>;
 
 		using BE=typename Posit<T,totalbits,esbits,FT,positspec>::BackendT;
-		using PPEMU=Posit<T, totalbits,esbits, std::make_unsigned_t<T>,positspec>;
 
-		if constexpr (std::is_base_of<BE, BackendXPosit<T,PPEMU>>::value)
+		if constexpr (std::is_base_of<HwBaseBackend,BE >::value)
 			return BE({},p.v);
 		else
 		return PP::unpacked_low2full(p.unpack_low());
