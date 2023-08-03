@@ -13,5 +13,5 @@ paths = [
 ]
 
 [paths]
-compile_commands = "build/compile_commands.json"
+compile_commands = "builddir/compile_commands.json"
 output_dir = "cppposit_docs/"

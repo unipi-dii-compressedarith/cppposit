@@ -40,6 +40,7 @@
 # build folders
 build/
 build_/
+builddir/
 .vscode/
 # build folder
 doc/build/
