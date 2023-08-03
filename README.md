@@ -36,11 +36,11 @@ template <class T,int totalbits, int esbits, class BackendType, PositSpec specs>
 - `PositSpec` is a type used to interpret the value of the represented by the integer $-2^{(nbits-1)}$
 
 ```c++
-enum PositSpec { 
-		WithNone, /// never consider special numbers. The top value is never present
-		WithNan, /// one top Nan (or Nar using posit spec terminology)
-		WithNanInfs, /// one top Nan and two signed Infinites (for more float compatibility)
-		WithInfs /// one top Nan and two signed Infinites (for more float compatibility)
+enum PositSpec {
+	WithNone, /// never consider special numbers. The top value is never present
+	WithNan, /// one top Nan (or Nar using posit spec terminology)
+	WithNanInfs, /// one top Nan and two signed Infinites (for more float compatibility)
+	WithInfs /// one top Nan and two signed Infinites (for more float compatibility)
 }; 
 ```
 
