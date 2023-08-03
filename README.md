@@ -32,7 +32,7 @@ template <class T,int totalbits, int esbits, class BackendType, PositSpec specs>
 - this is a Posit with `totalbits` size and it is stored in an storage type of class `T` whose size is at least `totalbits`.
 - `totalbits` can go from 2 to 63
 - `esbits` is the maximum exponent size in bits. Values from 0 to totalbits-1 are supported
-- `BackendType` is the data type that holds the fractional part during operations
+- `BackendType` is the data type that holds the fractional part during operations (more info about backends [here](https://federicorossifr.github.io/cppposit/docBackends.html) )
 - `PositSpec` is a type used to interpret the value of the represented by the integer $-2^{(nbits-1)}$
 
 ```c++
