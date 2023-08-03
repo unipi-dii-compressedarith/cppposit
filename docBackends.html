@@ -1,0 +1,51 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"></meta><meta content="width=device-width, initial-scale=1" name="viewport"></meta><title>Backends</title><link href="styles.css" rel="stylesheet"></link><script src="highlight.min.js"></script><script>hljs.highlightAll();</script><link href="katex.min.css" rel="stylesheet"></link><script src="katex.min.js"></script><script src="auto-render.min.js"></script><script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: '$$', right: '$$', display: true},
+          {left: '$', right: '$', display: false},
+        ],
+      });
+    });
+  </script><link href="apple-touch-icon.png" sizes="180x180" rel="apple-touch-icon"></link><link href="favicon-32x32.png" sizes="32x32" type="image/png" rel="icon"></link><link href="favicon-16x16.png" sizes="16x16" type="image/png" rel="icon"></link></head><body><div id="wrapper"><section class="section"><div class="container"><div class="columns"><aside class="column is-one-fifth"><ul class="menu-list"><p class="is-size-4">cppposit 1.0.0</p><p class="menu-label">Navigation</p><li><a href="index.html">Home</a></li><li><a href="search.html">Search</a></li><li><a href="https://hdoc.io">Made with hdoc</a></li><p class="menu-label">Pages</p><li><a href="docExamples.html">Examples</a></li><li><a href="docBackends.html">Backends</a></li><p class="menu-label">API Documentation</p><li><a href="functions.html">Functions</a></li><li><a href="records.html">Records</a></li><li><a href="enums.html">Enums</a></li><li><a href="namespaces.html">Namespaces</a></li></ul></aside><div class="column" style="overflow-x: auto"><main class="content"><h1>Backends</h1>
+<p>cppposit supports several different backends for arithmetic computations.
+The implemented backends are located in <code>&lt;cppposit_root&gt;/include/backends/</code></p>
+<h2>Softback</h2>
+<p>The softback backend emulates posit arithmetic operations at bit level, resembling an actual hardware implementation in software.</p>
+<p>File: <code>&lt;cppposit_root&gt;/include/backends/softback.hpp</code></p>
+<p>Instantiation:</p>
+<pre><code class="language-c++">using SoftBack = uint32_t; // soft backend with a 32-bit storage
+using P32_2 = Posit&lt;int32_t, 32, 2, SoftBack, PositSpec::WithInfs&gt;;
+</code></pre>
+<h2>Fixed</h2>
+<p>Fixed-point backend uses a `fixedtrait`` specified fixed-point integer backend to perform arithmetic operations between posits.</p>
+<p>File: <code>&lt;cppposit_root&gt;/include/backends/fixed.hpp</code></p>
+<p>Instantiation:</p>
+<pre><code class="language-c++">// 32-bit fixed point backend
+using FixedBack = BackendFixed&lt;fixedtrait&lt;int32_t,32&gt;,int32_t&gt;; 
+using P16_0 = Posit&lt;int16_t, 16, 0, FixedBack, PositSpec::WithInfs&gt;;
+</code></pre>
+<p>Note that the size of the fixed trait must be enough to accomodate the dynamic range of the posit configuration.</p>
+<h2>Float/Double</h2>
+<p>Float/Double backend uses the native floating point types (if available) to perform posit arithmetic computations. Double can be used to accomodate larger posit configurations (e.g. 32-bit posits).</p>
+<p>File: <code>&lt;cppposit_root&gt;/include/backends/float.hpp</code></p>
+<p>Instantiation:</p>
+<pre><code class="language-c++">using FloatBack = float; 
+using DoubleBack = double; 
+using P16_2 = Posit&lt;int16_t, 16, 2, FloatBack, PositSpec::WithInfs&gt;;
+using P32_2 = Posit&lt;int32_t, 32, 2, DoubleBack, PositSpec::WithInfs&gt;;
+</code></pre>
+<h2>Generalized hardware backend</h2>
+<p>The Posit class is also instrumented to bypass emulations if proper hardware support is available. All the backends that extends the base are treated like hardware backends by the library.</p>
+<p>File: <code>&lt;cppposit_root&gt;/include/backends/hwbaseback.hpp</code></p>
+<pre><code class="language-c++">struct HwBaseBackend {};
+</code></pre>
+<p>You can provide specialized hardware interface customising the demo backend in <code>&lt;cppposit_root&gt;/include/backends/xpositback.hpp</code>. Since it can happens that not all the functionalities are implemented in hardware, the hardware backend template arguments needs a posit type configured with full emulation.</p>
+<p>In the following example we are using the demo backend <code>BackendXPosit</code>. In the demo we imagine that we only have instructions for arithmetic operations, while the conversions between posits and other native types are performed via emulation using the <code>PPEMU</code> type.</p>
+<pre><code class="language-c++">using PPEMU = Posit&lt;int32_t, 32, 2, uint32_t, PositSpec::WithInfs&gt;;
+using PP = Posit&lt;int32_t, 32, 2, BackendXPosit&lt;int32_t,PPEMU&gt;, PositSpec::WithInfs&gt;;
+PP OneHalf(0.5f);
+std::cout &lt;&lt; OneHalf &lt;&lt; std::endl;
+return 0;
+</code></pre>
+</main></div></div></div></section></div><footer class="footer"><p>Documentation for cppposit 1.0.0.</p><p>Generated by <a href="https://hdoc.io/">hdoc</a> version 1.4.1-hdocInternal on 2023-08-03T08:32:05 UTC.</p><p class="has-text-grey-light">19AD43E11B2996</p></footer></body></html>
