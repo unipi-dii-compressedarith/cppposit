@@ -7,4 +7,3 @@ add_custom_command(
 )
 
 add_executable(example_09_tabulated ${CMAKE_CURRENT_SOURCE_DIR}/09_tabulated.cpp ${CMAKE_CURRENT_SOURCE_DIR}/ptab4_0.h)
-add_dependencies(examples example_09_tabulated) 
