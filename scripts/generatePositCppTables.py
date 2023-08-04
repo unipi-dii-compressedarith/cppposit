@@ -65,7 +65,9 @@ args = parser.parse_args()
 nbits = args.n
 esbits = args.e
 outfile = args.o
-
+print(f'Generating source header for table: n={nbits}, esbits={esbits}')
 out=formatStructOps(nbits,esbits)
-print(out)
+
+with open(outfile,"w") as f:
+    f.write(out)
 
