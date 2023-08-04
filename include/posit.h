@@ -17,6 +17,7 @@
 #include <backends/xpositback.hpp>
 #include <backends/unpacked.hpp>
 #include <backends/ptaback.hpp>
+#include <backends/tabback.hpp>
 #include <interface/std/std.hpp>
 #include <complex>
 #include <iostream>

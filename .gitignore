@@ -4,6 +4,7 @@
 */posit16_tbl.cpp
 */float12_tbl.cpp
 */float16_tbl.cpp
+ptab*.h
 # Prerequisites
 *.d
 
