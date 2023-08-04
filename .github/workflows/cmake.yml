@@ -22,7 +22,7 @@ jobs:
     
     - name: Install prerequisites
       run: >
-        sudo apt install libeigen3-dev 
+        sudo apt install libeigen3-dev;
         pip install -i https://test.pypi.org/simple/ hardposit==0.2.9 
       
     - name: Configure CMake
