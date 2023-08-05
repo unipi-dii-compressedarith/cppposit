@@ -2,7 +2,7 @@
 
 float convert32(const float x) {
   posit::Posit<int32_t, 32, 2, uint32_t, posit::PositSpec::WithNan> y(x);
-  const uint32_t z =  *(uint32_t*)&y;
+  const int32_t z =  *(int32_t*)&y;
   std::cout << z << std::endl;
   return *(posit::Posit<int32_t, 32, 2, uint32_t, posit::PositSpec::WithNan>*)&z;  
 }

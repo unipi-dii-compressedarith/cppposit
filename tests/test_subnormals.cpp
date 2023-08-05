@@ -21,13 +21,13 @@ float convert16(const float x) {
 TEST_CASE("Test 32,2 minposit", "[short]") {
   float a = convert32(1.75911e-33f);
   float b = convert32(-1.15356e-33f);
-  REQUIRE(P(a).v == 7u);
-  REQUIRE(P(b).v == 4294967290u);
+  REQUIRE(P(a).v == 7);
+  REQUIRE(P(b).v == -6);
 }
 
 TEST_CASE("Test 16,2 minposit", "[short]") {
   float a = convert32(6.40675e-27f);
   float b = convert32(-8.76183e-37f);
-  REQUIRE(P16(a).v == 1u);
-  REQUIRE(P16(b).v == -1u);
+  REQUIRE(P16(a).v == 1);
+  REQUIRE(P16(b).v == -1);
 }
