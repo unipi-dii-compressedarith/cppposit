@@ -65,3 +65,8 @@ PP OneHalf(0.5f);
 std::cout << OneHalf << std::endl;
 return 0;
 ```
+
+## Tabulated Backend
+
+TabulatedBackend provides look-up table backend for posit computations. More details are available in [Tabulation](docTabulation.html)
+

@@ -9,7 +9,8 @@ version = "1.0.0"
 homepage="docs/getting_started.md"
 paths = [
     "docs/Examples.md",
-    "docs/Backends.md"
+    "docs/Backends.md",
+    "docs/Tabulation.md"
 ]
 
 [paths]
