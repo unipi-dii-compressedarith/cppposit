@@ -135,11 +135,6 @@ outfile = args.o
 logtab = args.log
 
 print(f'Generating source header for table: n={nbits}, esbits={esbits}')
-#demologexp(4,6,6,2)
-
-
-#exptab = generate1DMathTable(6,2,math.exp,False)
-
 out=formatStructOps(nbits,esbits,logtab)
 
 with open(outfile,"w") as f:
