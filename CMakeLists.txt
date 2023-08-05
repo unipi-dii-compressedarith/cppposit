@@ -27,4 +27,7 @@ include_directories(extern)
 
 add_subdirectory(examples)
 
+enable_testing()
+add_subdirectory(tests)
+
 

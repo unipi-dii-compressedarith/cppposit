@@ -5,6 +5,7 @@
 */float12_tbl.cpp
 */float16_tbl.cpp
 ptab*.h
+logptab*.h
 # Prerequisites
 *.d
 

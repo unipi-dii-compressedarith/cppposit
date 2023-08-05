@@ -28,7 +28,7 @@ namespace posit {
 	struct TabulatedBackend: public HwBaseBackend
 	{
 		struct single_tag{};
-		using T = PTableTrait::type;
+		using T = typename PTableTrait::type;
         constexpr static T indexMask = (1<<PTableTrait::nbits::value)-1;
 		TabulatedBackend() {}
 		TabulatedBackend(single_tag, T x): v(x) {}
