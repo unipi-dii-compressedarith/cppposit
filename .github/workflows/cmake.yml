@@ -36,4 +36,4 @@ jobs:
     - name: Build and run Tests
       run: >
         cmake --build ${{github.workspace}}/buildc;
-        ctest --verbose;
+        cd ${{github.workspace}}/buildc && ctest --verbose;
