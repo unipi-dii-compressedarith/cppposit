@@ -8,18 +8,28 @@
  * --
  */
 
-
+#include <type_traits>
 
 namespace posit {
 
     template <class T>
 	struct is_posit_backend;
 
-	template <class T, class PositEmu, class PositTable>
+	template <class T, int n, int e, bool log>
+	struct PositTableTrait {
+		using type = T;
+		using nbits = std::integral_constant<int,n>;
+		using esbits = std::integral_constant<int,e>;
+		using isLogtab = std::integral_constant<bool,log>;
+	};
+
+
+	template <class PTableTrait, class PositEmu, class PTable>
 	struct TabulatedBackend: public HwBaseBackend
 	{
 		struct single_tag{};
-        constexpr static T indexMask = (1<<PositEmu::vtotalbits)-1;
+		using T = PTableTrait::type;
+        constexpr static T indexMask = (1<<PTableTrait::nbits::value)-1;
 		TabulatedBackend() {}
 		TabulatedBackend(single_tag, T x): v(x) {}
 
@@ -34,20 +44,39 @@ namespace posit {
 		constexpr operator long () const {return (long)PositEmu::from_sraw(v);}
 
 	 	TabulatedBackend operator + (TabulatedBackend o) const { 
-            return TabulatedBackend{{},PositTable::add[v & indexMask][o.v & indexMask]};
+            return TabulatedBackend{{},PTable::add[v & indexMask][o.v & indexMask]};
         } 
 		TabulatedBackend operator * (TabulatedBackend o) const { 
-            return TabulatedBackend{{},PositTable::mul[v & indexMask][o.v & indexMask]};
+			if constexpr (PTableTrait::isLogtab::value) {
+				T idxa = v & indexMask, idxb = o.v & indexMask;
+				T sign = (idxa >> (PTableTrait::nbits::value-1)) ^ (idxb >> (PTableTrait::nbits::value-1));
+				T logA = PTable::log[idxa], logB = PTable::log[idxb];
+				T logAB = PTable::add[logA & indexMask][logB & indexMask];
+				T expAB = PTable::exp[logAB];
+				if(sign) expAB = - expAB;
+				return TabulatedBackend{{},expAB};
+			} else {
+            	return TabulatedBackend{{},PTable::mul[v & indexMask][o.v & indexMask]};
+			}
         } 
 	 	TabulatedBackend operator / (TabulatedBackend o) const { 
-            return TabulatedBackend{{},PositTable::div[v & indexMask][o.v & indexMask]};
+			if constexpr (PTableTrait::isLogtab::value) {
+				T idxa = v & indexMask, idxb = o.v & indexMask;
+				T sign = (idxa >> (PTableTrait::nbits::value-1)) ^ (idxb >> (PTableTrait::nbits::value-1));
+				T logA = PTable::log[idxa], logB = -PTable::log[idxb];
+				T logAB = PTable::add[logA & indexMask][logB & indexMask];
+				T expAB = PTable::exp[logAB];
+				if(sign) expAB = - expAB;
+				return TabulatedBackend{{},expAB};
+			} else
+            	return TabulatedBackend{{},PTable::div[v & indexMask][o.v & indexMask]};
         } 
 		T v;
 
 	};
 
-	template <class T, class PositEmu, class PositTable>
-	struct is_posit_backend<TabulatedBackend<T,PositEmu,PositTable> >: public std::true_type
+	template <class T, class PositEmu, class PTable>
+	struct is_posit_backend<TabulatedBackend<T,PositEmu,PTable> >: public std::true_type
 	{
 	};
     
