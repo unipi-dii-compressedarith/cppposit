@@ -33,4 +33,7 @@ jobs:
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/buildc --config ${{env.BUILD_TYPE}} --target examples
 
-
+    - name: Build and run Tests
+      run: >
+        cmake --build ${{github.workspace}}/buildc;
+        ctest --verbose;
