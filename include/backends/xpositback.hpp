@@ -12,6 +12,9 @@ namespace posit {
     template <class T>
 	struct is_posit_backend;
 
+	/// @brief Demo Backend for ISA-extended Posit backend
+	/// @tparam T holder type
+	/// @tparam PositEmu Posit type used for full-software emulation as fallback
 	template <class T,class PositEmu>
 	struct BackendXPosit: public HwBaseBackend
 	{

@@ -20,6 +20,9 @@ namespace posit {
     template <class PT>
 	struct UnpackedPosit;
 
+	/// @brief Fixed Backend for Posit
+	/// @tparam FT FixedTrait class to specify fixed-point number of bits
+	/// @tparam ET ExponentType used to construct the underlying UnpackedPosit
 	template <class FT, class ET>
 	struct BackendFixed
 	{

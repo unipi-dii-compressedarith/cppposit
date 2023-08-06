@@ -15,6 +15,11 @@ namespace posit {
     template <class T>
 	struct is_posit_backend;
 
+	/// @brief Posit table trait struct: describes characteristic of a tabulated set of operations
+	/// @tparam T holder type
+	/// @tparam n number of Posit bits
+	/// @tparam e number of exponent bits
+	/// @tparam log True if contains logarithmic alternativ to mul and div tables
 	template <class T, int n, int e, bool log>
 	struct PositTableTrait {
 		using type = T;
@@ -23,7 +28,10 @@ namespace posit {
 		using isLogtab = std::integral_constant<bool,log>;
 	};
 
-
+	/// @brief Tabulated Backend for posit
+	/// @tparam PositEmu Posit type used for full-software emulation as a fallback
+	/// @tparam PTable Posit Table class containing the tables used for the operations as static constexpr members
+	/// @tparam PTableTrait Posit Table trait 
 	template <class PTableTrait, class PositEmu, class PTable>
 	struct TabulatedBackend: public HwBaseBackend
 	{

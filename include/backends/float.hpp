@@ -18,6 +18,8 @@ namespace posit {
     template <class PT>
 	struct UnpackedPosit;
 
+	/// @brief Floating-point like backend
+	/// @tparam B floating-point type (can be float or double)
 	template <class B>
 	struct BackendFloat
 	{

@@ -4,6 +4,8 @@ version = "1.0.0"
 
 # Optional, adding this will enable direct links from the documentation
 # to your source code.
+git_repo_url = "https://github.com/federicorossifr/cppposit/"
+git_default_branch = "main"
 
 [pages]
 homepage="docs/getting_started.md"
@@ -12,6 +14,19 @@ paths = [
     "docs/Backends.md",
     "docs/Tabulation.md"
 ]
+
+[ignore]
+paths = [
+    "include/floats",
+    "include/interface",
+    "include/traits/floattraits.hpp",
+    "include/traits/fixedtraits.hpp",
+    "include/typehelpers.hpp",
+    "include/bithippop.hpp"
+
+]
+
+
 
 [paths]
 compile_commands = "builddir/compile_commands.json"

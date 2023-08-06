@@ -38,12 +38,18 @@ namespace posit {
 		typename PT::POSIT_UTYPE fraction; /// decoded fraciton left aligned with the leading 1
 	};
 
+    /// @brief Helper class to pack and unpack posit from/to backend
+    /// @tparam PT Posit type
+    /// @tparam FT Fraction type
     template <class PT, class FT>
 	struct PositPacker<PT,Unpacked<FT,typename PT::exponenttype> >
 	{
 		using BE = Unpacked<FT,typename PT::exponenttype>;
 		using UP = UnpackedPosit<PT>;
 
+		/// @brief Construct the posit Backend from an UnpackedPosit instance 
+		/// @param up Unpacked Posit instance
+		/// @return Backend type instance
 		static CONSTEXPR14 BE unpacked_to_backend(UP up)
 		{
 			using BE = Unpacked<FT,typename PT::exponenttype>;
@@ -59,6 +65,9 @@ namespace posit {
 			return r;
 		}
 
+		/// @brief Construct an Unpacked posit instance from a Backend instance
+		/// @param b Backend instance
+		/// @return UnpackedPosit
 		static CONSTEXPR14 UP backend_to_unpacked(BE b)
 		{
 			if(b.type == NumberType::Regular)

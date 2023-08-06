@@ -207,7 +207,9 @@ namespace posit
 		}
 
 		using PT=PositTrait<T,totalbits,esbits,positspec>;
-		struct DeepInit{}; /// special constant used internally for safely constructing the posit from raw
+		
+		/// special constant used internally for safely constructing the posit from raw
+		struct DeepInit{}; 
 
 	    enum { vtotalbits = totalbits, vesbits = esbits};
 
@@ -270,12 +272,13 @@ namespace posit
 			q << (sizeof(q)-sizeof(be.v))*8;
 			return (sign)?-q:q; // restore sign
 		}
-		///@{ 
-		/// @name Comparison Functions
 
-		/// returns true if the two numbers are comparable
+
+		/// Returns true if the two Posits are comparable
 	 	constexpr bool comparable(const Posit & u) const { return !(PT::withnan && (is_nan()||u.is_nan())); }
-	    friend constexpr bool operator == (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v == u.v; }
+	    
+		
+		friend constexpr bool operator == (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v == u.v; }
 	    friend constexpr bool operator == (const Posit & a, const double & d)  { return d == (double)a; }
 	    friend constexpr bool operator == (const Posit & a, const float & f)  { return f == (float)a; }
 	    friend constexpr bool operator != (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v != u.v;  }
@@ -284,89 +287,133 @@ namespace posit
 	    friend constexpr bool operator > (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v > u.v; }
 	    friend constexpr bool operator >= (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v >= u.v; }
 
-	    ///@}
-
 	    static constexpr Posit ldexp(const Posit & u, int exp); // exponent product
 
 	    /// empty constructor
 		constexpr Posit() : v(0) {}
 
-		/// 
+		/// Construct the Posit with its backend direct initialization
 		CONSTEXPR14 explicit Posit(single_tag t, uint32_t p) { v = pack_posit<T,totalbits,esbits,FT,positspec>(BackendT(t,p)).v; }
 
-	    /// construct passing the holding type x
+	    /// Construct the Posit passing the holding type x
 		CONSTEXPR14 explicit Posit(DeepInit, T x) : v(x) {} 
 
-
-		/// construct from decomposed (s, R,E,F)
+		/// Construct the Posit using its Unpacked from (s, R,E,F)
 		CONSTEXPR14 explicit Posit(UnpackedPosit u) : v(pack_low(u).v) {} 
 
-		/// construct from fully unpacked floating (s,e,F)
+		/// Construct the Posit from its backend BackendT
 		CONSTEXPR14 explicit Posit(BackendT u) : v(pack_posit<T,totalbits,esbits,FT,positspec>(u).v) {} 
 
-		///@{ 
-		/// @name Conversion constructors
-			CONSTEXPR14 Posit(int i): Posit(BackendT(i)) {}
-			CONSTEXPR14 Posit(long int i): Posit(BackendT(i)) {}
-			CONSTEXPR14 Posit(long long int i): Posit(BackendT(i)) {}
-			CONSTEXPR14 Posit(unsigned int i): Posit(BackendT(i)) {}
-			CONSTEXPR14 Posit(long unsigned int i): Posit(BackendT(i)) {}
-			CONSTEXPR14 Posit(long long unsigned int i): Posit(BackendT(i)) {}
-			CONSTEXPR14 Posit(std::complex<float> c): Posit(BackendT(c.real())) {}
-			CONSTEXPR14 Posit(std::complex<double> c): Posit(BackendT(c.real())) {}
-		 ///@}
+		
+		/// @brief Convert the integer i to Posit 
+		/// @param i 32-bit signed integer value
+		/// @return 
+		CONSTEXPR14 Posit(int i): Posit(BackendT(i)) {}
 
+		/// @brief Convert the long integer i to Posit 
+		/// @param i 64-bit signed integer value
+		/// @return 
+		CONSTEXPR14 Posit(long int i): Posit(BackendT(i)) {}
 
+		/// @brief Convert the long integer i to Posit 
+		/// @param i 64-bit signed integer value
+		/// @return 
+		CONSTEXPR14 Posit(long long int i): Posit(BackendT(i)) {}
+
+		/// @brief Convert the long integer i to Posit 
+		/// @param i 32-bit unsigned integer value
+		/// @return 
+		CONSTEXPR14 Posit(unsigned int i): Posit(BackendT(i)) {}
+
+		/// @brief Convert the long integer i to Posit 
+		/// @param i 64-bit unsigned integer value
+		/// @return 
+		CONSTEXPR14 Posit(long unsigned int i): Posit(BackendT(i)) {}
+
+		/// @brief Convert the long integer i to Posit 
+		/// @param i 64-bit unsigned integer value
+		/// @return 
+		CONSTEXPR14 Posit(long long unsigned int i): Posit(BackendT(i)) {}
+		CONSTEXPR14 Posit(std::complex<float> c): Posit(BackendT(c.real())) {}
+		CONSTEXPR14 Posit(std::complex<double> c): Posit(BackendT(c.real())) {}
+
+		/// @brief Convert the float number f to Posit 
+		/// @param f 32-bit float value
+		/// @return 
 	    CONSTEXPR14 Posit(float f): Posit(BackendT(f)) {}
 
+		/// @brief Convert the double number d to Posit 
+		/// @param f 64-bit double value
+		/// @return 
 		CONSTEXPR14 Posit(double d): Posit(BackendT(d)) {}
 
+		/// @brief Assignment operator with a float value
+		/// @param f 32-bit float value
+		/// @return Posit value converted from the float f
 		CONSTEXPR14 Posit & operator= (float f) {
 			v=Posit(f).v;
 			return *this;		
 		}
 
-		CONSTEXPR14 Posit & operator= (double f) {
-			v = Posit(f).v;
+		/// @brief Assignment operator with a double value
+		/// @param d 64-bit double value
+		/// @return Posit value converted from the double d
+		CONSTEXPR14 Posit & operator= (double d) {
+			v = Posit(d).v;
 			return *this;		
 		}
 
-		CONSTEXPR14 Posit & operator= (int f) {
-			v = Posit(f).v;
+		/// @brief Assignment operator with a integer value
+		/// @param i 32-bit integer value
+		/// @return Posit value converted from the integer i
+		CONSTEXPR14 Posit & operator= (int i) {
+			v = Posit(i).v;
 			return *this;		
 		}
 
-		/// builds a Posit from the given floating point expressed as the associated integer
-		/// e.g. from_floatint<single_trait>(0x123456)
+		/// @brief Build the Posit from a floating point value expressed as the representing integer 
+		/// @tparam XFT floating point trait type 
+		/// @param x floating point representing integer
+		/// @return Posit built from the floating point conversion 
 		template <class XFT>
 		static CONSTEXPR14 Posit from_floatval(typename XFT::holder_t x) { return BackendT::template make_floati<XFT>(x); }
 
-		/// builds a Posit from the signed number
+		/// @brief Build Posit using its representing signed integer x 
+		/// @param x signed integer representation of the Posit
+		/// @return Posit built using its signed integer representation
 		static CONSTEXPR14 Posit from_sraw(T x) { return Posit(DeepInit(), x); }
 
-		/// builds a Posit from the unsigned number
+		/// @brief Build Posit using its representing unsigned integer x 
+		/// @param x unsigned integer representation of the Posit
+		/// @return Posit built using its unsigned integer representation		
 		static CONSTEXPR14 Posit from_uraw(typename PT::POSIT_UTYPE x) { return Posit(DeepInit(), x); }
 
-		/// returns the underlying value
+		/// @brief Returns Posit integer representation 
+		/// @return Posit integer field v
 		constexpr T to_sraw() const { return v;}
 
-		/// returns the unsigned value
+		/// @brief Returns Posit unsigned integer representation 
+		/// @return Posit integer field v as unsigned type
 		constexpr typename PT::POSIT_UTYPE to_uraw() const { return (typename PT::POSIT_UTYPE)v;}
 
-		/// Level 1 to Level 4
+		/// @brief Unpack the Posit to its backend type BackendT
+		/// @return An instance of the BackendT initialized with the current posit value
 		constexpr BackendT to_backend() const { 
 			return unpack_posit<T,totalbits,esbits,FT,positspec>(*this);
 		}
 
-		/// absolute value (Level 1) 
+		/// @brief Compute the absolute value of the Posit (L1)
+		/// @return New Posit containing the absolute value of the initial Posit
 		constexpr Posit abs()  const { return from_sraw(pcabs(v));  }
 
-		/// negation (Level 1)
+		/// @brief Compute the sign opposition of the Posit (L1)
+		/// @return New Posit with the opposite sign of the initial Posit
 		constexpr Posit neg()  const { return from_sraw(-v); }; 
 
 		constexpr Posit operator-() const { return neg(); } 
 
-		/// reciprocate using digital negation
+		/// @brief Digital negation operator that calls the Posit reciprocate function
+		/// @return Returns the reciprocate of the current Posit
 		constexpr Posit operator~() const { return reciprocate(); } 
 
 	    /// returns true if the value is NaN
@@ -377,58 +424,83 @@ namespace posit
 		constexpr bool is_zero() const { return v == 0; }
 		/// returns true for one
 		constexpr bool is_one() const { return v == PT::POSIT_ONE; }
-		/// moves clockwise in the regular numbers. Any special number is stationary
-		constexpr Posit prev() const { return from_sraw(v > PT::POSIT_MAXPOS || v <= PT::POSIT_MINNEG ? v : v-1); }
-		/// moves anterclockwise in the regular numbers. Any special number is stationary
-		constexpr Posit next() const { return from_sraw(v < PT::POSIT_MINNEG || v >= PT::POSIT_MAXPOS ? v : v+1); }
-		
-		constexpr Posit normalize() const { 
-			if(abs().v <= PT::POSIT_ONE) return from_sraw(v);
-			return (v & PT::POSIT_SIGNBIT) != 0 ? from_sraw(v + PT::POSIT_INVERTBIT):from_sraw(v - PT::POSIT_INVERTBIT);
-		}
 
-		/**
-		 * \brief returns true if in the unit interval [0,1]  (Level 1)
-		 */
+		/// @brief Returns previous (clockwise in the Posit ring) regular Posit number
+		constexpr Posit prev() const { return from_sraw(v > PT::POSIT_MAXPOS || v <= PT::POSIT_MINNEG ? v : v-1); }
+		
+		/// @brief Returns next (anti-clockwise in the Posit ring) regular Posit number
+		constexpr Posit next() const { return from_sraw(v < PT::POSIT_MINNEG || v >= PT::POSIT_MAXPOS ? v : v+1); }
+
+		/// @brief Check if the Posit is in in the unit interval [0,1]  (Level 1)
+		/// @return True if Posit in the interval [0,1]
 		constexpr bool is_unitary_range() const { return PT::is_sphere_range(v); }
 
-		/**
-		 * \brief returns true if in the sphere interval [-1,1] (Level 1)
-		 */
+		/// @brief Check if the Posit is in in the unit interval [-1,1]  (Level 1)
+		/// @return True if Posit in the interval [-1,1]
 		constexpr bool is_sphere_range() const { return PT::is_sphere_range(v); }
 
-		///@{ 
-		/// @name Arithmetic operations
-
+		/// @brief Sum and assignment operator
+		/// @param a Right-hand-side Posit in the sum
+		/// @return This instance of Posit after the sum
 		Posit& operator+=(const Posit &a) { Posit r = *this+a; v = r.v; return *this; }
+
+		/// @brief Subtraction and assignment operator
+		/// @param a Right-hand-side Posit in the subtraction
+		/// @return This instance of Posit after the subtraction
 		Posit& operator-=(const Posit &a) { Posit r = *this-a; v = r.v; return *this; }
 
+		/// @brief Subtraction operator between two Posits
+		/// @param a Addend Posit
+		/// @param b Subtracting Posit
+		/// @return Subtraction of a and b
 		friend CONSTEXPR14 Posit operator-(const Posit & a, const Posit & b)  { return a + (-b); }
 
-		/// level 4 product 
+		/// @brief Multiplication operator between two Posits
+		/// @param a multiplicand Posit
+		/// @param b multiplicand Posit
+		/// @return Multiplication of a and b
 		friend CONSTEXPR14 Posit operator*(const Posit & a, const Posit & b) 
 		{
 			return pack_posit<T,totalbits,esbits,FT,positspec>(a.to_backend()*b.to_backend());
 		}
 
-		/// fused multiply and addition 
-		/// @todo improve
+		/// @brief Fused multiply and add operation between two posits without intermediate re-packing
+		/// @param a Multiplicand posit 
+		/// @param b Multiplicand posit
+		/// @param c Accumulator posit
+		/// @return a * b + c
 		friend CONSTEXPR14 Posit fma(const Posit & a, const Posit & b, const Posit & c)
 		{
 			return pack_posit<T,totalbits,esbits,FT,positspec>(a.to_backend()*b.to_backend()+c.to_backend());
 		}
 
-		/// multiply and assign operation 
+		/// @brief Multiplication and assignment operator
+		/// @param a Right-hand-side Posit in the multiplication
+		/// @return This instance of Posit after the multiplication		
 		CONSTEXPR14 Posit & operator*= (const Posit & b)
 		{
 			*this = pack_posit<T,totalbits,esbits,FT,positspec>(to_backend()*b.to_backend());
 			return *this;
 		}
 
-		/// dive and assign operation
-		friend CONSTEXPR14 Posit operator/(const Posit & a, const Posit & b)  { return pack_posit< T,totalbits,esbits,FT,positspec> (a.to_backend()/b.to_backend()); }
+		/// @brief Division operator between two Posits
+		/// @param a dividend Posit
+		/// @param b divider Posit
+		/// @return Division of a and b
+		friend CONSTEXPR14 Posit operator/(const Posit & a, const Posit & b)  { 
+			return pack_posit< T,totalbits,esbits,FT,positspec> (a.to_backend()/b.to_backend()); 
+		}
+
+		/// @brief Division and assignment operator
+		/// @param a Right-hand-side Posit in the division
+		/// @return This instance of Posit after the division		
 	    Posit & operator/= (const Posit & a) { auto x = *this / a; v = x.v; return *this; }
 
+
+		/// @brief Addition operator between two Posits
+		/// @param a addend Posit
+		/// @param b addend Posit
+		/// @return Addition of a and b
 	    friend CONSTEXPR14 Posit operator+(const Posit & a, const Posit & b)
 	    {
             auto ab = a.to_backend();
@@ -440,12 +512,12 @@ namespace posit
 
 
 		/**
-		 * @brief returns 1/x as Level 1
+		 * @brief Returns 1/x as Level 1.
 		 * Special Cases:
-		 *	 zero should give positive infinity, if present, nan otherwise
-		 *	 nan  should be nan, if present
-		 *	 +inf/-inf should give zero, if present
-		 *	 before0,after0 should give infinity, if present
+		 *	 zero should give positive infinity, if present, nan otherwise;
+		 *	 nan  should be nan, if present;
+		 *	 +inf/-inf should give zero, if present;
+		 *	 before0,after0 should give infinity, if present.
 		 *
 		 * @return constexpr Posit 
 		 */
@@ -454,9 +526,6 @@ namespace posit
 			return is_infinity() ? zero() : (v == PT::POSIT_NAN ? nan() : (v == 0 ? pinf() : from_sraw(PT::reciprocate(v))));
 		}	    
 
-
-		///@{ 
-		/// @name Special Constants
 
 		static constexpr Posit zero() { return from_sraw(0); }
 		static constexpr Posit inf() { return from_sraw(PT::POSIT_PINF); }
@@ -473,11 +542,10 @@ namespace posit
 		static constexpr Posit mone() { return from_sraw(PT::POSIT_MONE); }
 		static constexpr Posit onehalf() { return from_sraw(PT::POSIT_HALF); }
 
-		///@}
 
 		/**
 		 * @brief Relu Activation function (Level 1)
-		 * Returns 0 for negative and not nan, otherwise identity
+		 * @return 0 for negative and not nan, otherwise identity
 		 */
 		friend Posit relu(const Posit & a) { return a.is_nan() || a.v >= 0 ? a : zero(); }
 
@@ -501,8 +569,6 @@ namespace posit
 		constexpr uint32_t as_float_bin() const { return to_backend().template pack_xfloati<single_trait>(); }
 
 
-		///@{ 
-		/// @name Type casts
 
 		constexpr operator BackendT() const { return to_backend(); }
 
@@ -540,81 +606,59 @@ namespace posit
 			return v == p.v;
 		}			
 					
-		///@}
-
-		///@{ 
-		/// @name Special Functions
-
-		/// log_e(x) = log2(x)/log2(e) 
+		
+		/// @brief Natural logarithm of the Posit
+		/// @return Posit
 		constexpr Posit log() const { return Posit(std::log((double)*this)); }
 
-		//constexpr Posit twice_pseudosigmoid() const { return PT::POSIT_ESP_SIZE == 0 ? from_sraw((PT::POSIT_INVERTBIT+(v >> 1))): nan(); };
-
-
-		/// 1/(exp(-x)+1)
-		///		div2(addinvbit(div2(x)))
-        // q = bitshift((cast(self.invbit,'like',tena)),1)+1;
-        //        Y = cast(bitshift(cast(X,'like',tena)+q,-2),'like',X);
-
-	    //template <typename std::enable_if<esbits == 0, int>::type = 0>
+		/// @brief Pseudosigmoid without decoding the Posit; only works for 0-bit exponent posits
+		/// @return Posit
 		constexpr Posit pseudosigmoid() const { 
             //return from_sraw((v + 127 +2) *  64/256);
             return from_sraw((v+(PT::POSIT_INVERTBIT << 1) + 2) >> 2);
             //return from_sraw((PT::POSIT_INVERTBIT+(v >> 1))>>1); 
         };
 
-    // (X xor signbit) >> 2
-	    //template <typename std::enable_if<esbits == 0, int>::type = 0>
+		/// @brief Alternative Pseudosigmoid without decoding the Posit; only works for 0-bit exponent posits
+		/// @return Posit    	
 		constexpr Posit pseudosigmoidalt() const { 
             using POSIT_UTYPE = typename PT::POSIT_UTYPE;
             POSIT_UTYPE uv = (POSIT_UTYPE)v;
             return from_sraw( (T)((uv ^ PT::POSIT_SIGNMASK) >> 2));
         };
-		/// (exp(z)-1)
-		///		-mul2(c1(inv(div2(addinvbit(div2(-x))))))
-	    //template <typename std::enable_if<esbits == 0, int>::type = 0>
+
+		/// @brief Pseudo-ELU without decoding the Posit; only works for 0-bit exponent posits
+		/// @return Posit    
 		constexpr Posit elu() const { return from_sraw((PT::POSIT_INVERTBIT+(v >> 1))>>1); };
 
-		/// ln(1+exp(x))
-		/// x > .... = x
-		/// x = 0 == ??? 
-	    //template <typename std::enable_if<esbits == 0, int>::type = 0>
+		/// @brief Pseudo-SoftPlus without decoding the Posit; only works for 0-bit exponent posits
+		/// @return Posit    
 		Posit pseudosoftplus() const { return *this > Posit(3) ? *this : (-*this).pseudosigmoid().reciprocate().log(); };
 
-		/// k*sigm(k*x)-k/2
-	    //template <typename std::enable_if<esbits == 0, int>::type = 0>
+		/// @brief Pseudo-generalized TANH without decoding the Posit; only works for 0-bit exponent posits
+		/// @return Posit   
 		constexpr Posit pseudotanh(int k) const { return Posit(k)*((Posit(k)*from_sraw(v)).pseudosigmoid())-Posit(k/2);}
 
-		/// 2 sigm(2x)-1 = 1-(2 sigm(2x))
-		/// 2sigm(2x) is [-2,2] ==> [-1,1]
-		/// 2(0.5-sigm(2x))
-	    //template <typename std::enable_if<esbits == 0, int>::type = 0>
+		/// @brief Pseudo-Hyperbolic Tangent without decoding the Posit; only works for 0-bit exponent posits
+		/// @return Posit   
 		constexpr Posit pseudotanh() const { return (twice().pseudosigmoid()).twice()-one();}
 
 
-	    //template <typename std::enable_if<esbits == 0, int>::type = 0>
+		/// @brief Pseudo-Hyperbolic Tangent without decoding the Posit; only works for 0-bit exponent posits
+		/// @return Posit  
 		constexpr Posit fastTanh() const { 
-		   //auto y = ((v < 0)? this->twice():this->twice().neg()).pseudosigmoid().twice().one_minus_ur();
-		   //return (v < 0  ? -y : y);
-
 		   return (v < 0)? this->twice().pseudosigmoid().twice().one_minus_ur().neg():this->twice().neg().pseudosigmoid().twice().one_minus_ur();
 		}
 
-	    //template <typename std::enable_if<esbits == 0, int>::type = 0>
+		/// @brief Pseudo-ELU without decoding the Posit; only works for 0-bit exponent posits
+		/// @return Posit   
 		constexpr Posit fastELU() const {
-			// Holder type to increase precision
-			//using HP = Posit<int16_t,16,0,uint16_t,positspec>;
-			//HP h(this->v);
-
 			return (v >= 0)? *this: this->neg().pseudosigmoid().reciprocate().half().one_minus_ur().twice().neg();
 		}
-		/**
-		 * \breif If the value is in the unit interval [0,1] it returns 1-x if esbits=0
-		 */ 
+
+		/// @brief 1's complement without decoding the posit; only works for 0-bit exponent posits in the unary interval
+		/// @return Posit   
 		constexpr Posit one_minus_ur() const { return PT::POSIT_ESP_SIZE == 0 ? from_sraw(PT::POSIT_INVERTBIT-v) : one()-*this; }
-
-		///@}
-
 	};
 
 
@@ -624,10 +668,16 @@ namespace posit
 	#endif
 
 
-	#ifndef FPGAHLS
-	/**
-	 * Plot Posits using manipulator for expresssing differently
-	 */
+	
+	/// @brief Operator<< for Posit 
+	/// @tparam T Posit holding type
+	/// @tparam FT Posit backend type
+	/// @tparam totalbits Posit number of bits
+	/// @tparam esbits Posit maximum exponent bits
+	/// @tparam positspec Posit specifics for special numbers
+	/// @param ons std::ostream &
+	/// @param o Posit
+	/// @return std::ostream &
 	template <class T, int totalbits, int esbits, class FT, PositSpec positspec>
 	std::ostream & operator << (std::ostream & ons, Posit<T,totalbits,esbits,FT,positspec> const & o)
 	{
@@ -654,22 +704,32 @@ namespace posit
 		ons.setf(af & std::ios::basefield, std::ios::basefield);
 		return ons;
 	}
-	#endif
 
+	/// @brief Negation of the Posit 
+	/// @tparam T Posit holding type
+	/// @tparam FT Posit backend type
+	/// @tparam totalbits Posit number of bits
+	/// @tparam esbits Posit maximum exponent bits
+	/// @tparam positspec Posit specifics for special numbers
+	/// @param x Posit
+	/// @return Posit
 	template <class T, int totalbits, int esbits, class FT, PositSpec positspec>
 	constexpr Posit<T,totalbits,esbits,FT,positspec> neg(Posit<T,totalbits,esbits,FT,positspec> x) { return -x; }
 
+	/// @brief Reciprocate of the Posit 
+	/// @tparam T Posit holding type
+	/// @tparam FT Posit backend type
+	/// @tparam totalbits Posit number of bits
+	/// @tparam esbits Posit maximum exponent bits
+	/// @tparam positspec Posit specifics for special numbers
+	/// @param x Posit
+	/// @return Posit
 	template <class T, int totalbits, int esbits, class FT, PositSpec positspec>
 	constexpr Posit<T,totalbits,esbits,FT,positspec> reciprocate(Posit<T,totalbits,esbits,FT,positspec> x) { return ~x; }
 
-	/// helper class
 	template <class T, int hbits,int ebits, bool zeroes>
-	struct msb_exp
-	{
+	struct msb_exp {};
 
-	};
-
-	/// helper class
 	template <class T, int hbits,int ebits>
 	struct msb_exp<T,hbits,ebits,true>
 	{
@@ -679,7 +739,6 @@ namespace posit
 		}
 	};
 
-	/// helper class
 	template <class T, int hbits,int ebits>
 	struct msb_exp<T,hbits,ebits,false>
 	{
@@ -807,7 +866,6 @@ namespace posit
 	 * @tparam FT 
 	 * @tparam positspec 
 	 * @return Posit<T,totalbits,esbits,FT,positspec> 
-		verify for posit8 half() == X/X::two()
 	 */
 	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
 	CONSTEXPR14 auto Posit<T,totalbits,esbits,FT,positspec>::half() const -> Posit<T,totalbits,esbits,FT,positspec>

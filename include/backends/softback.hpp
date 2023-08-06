@@ -33,8 +33,11 @@ enum class NumberType {
   Infinity,
   NaN,
   Zero
-};  /// signed infinity and nan require the extra X bit
+}; 
 
+/// @brief Unpacked backend for full-software posit emulation
+/// @tparam FT Holder type for the fraction
+/// @tparam ET Holder type for the exponent
 template <class FT = uint64_t, class ET = int32_t>
 struct Unpacked {
   using fraction_type = FT;

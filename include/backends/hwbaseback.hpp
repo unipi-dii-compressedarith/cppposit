@@ -11,6 +11,7 @@
 
 namespace posit {
 
+    /// @brief Generalized helper class to mark hardware-based backends
     struct HwBaseBackend {};
     
 }
