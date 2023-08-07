@@ -48,3 +48,40 @@ enum PositSpec {
 ## Documentation
 
 API and documentation is available [here](https://federicorossifr.github.io/cppposit/).
+
+## Bibliography
+
+cppposit has been extensively used and expanded by the following works:
+
+
+1.  Cococcioni, Marco; Rossi, Federico; Ruffaldi, Emanuele; Saponara, Sergio  
+    **Fast Approximations of Activation Functions in Deep Neural Networks when using Posit Arithmetic**  
+    Sensors, vol. 20(5), 2020  
+    
+2.  Cococcioni, Marco; Rossi, Federico; Ruffaldi, Emanuele; Saponara, Sergio; Dupont de Dinechin, Benoit  
+    **Novel Arithmetics in Deep Neural Networks Signal Processing for Autonomous Driving: Challenges and Opportunities**  
+    IEEE Signal Processing Magazine, vol. 38(1), pp. 97-110, 2021  
+    
+3.  Cococcioni, Marco; Rossi, Federico; Ruffaldi, Emanuele; Saponara, Sergio  
+    **A Lightweight Posit Processing Unit for RISC-V Processors in Deep Neural Network Applications**  
+    IEEE Transactions on Emerging Topics in Computing, vol. (), pp. 1-1, 2021  
+
+4.  _Cococcioni, Marco; Rossi, Federico; Ruffaldi, Emanuele; Saponara, Sergio_  
+    **A Fast Approximation of the Hyperbolic Tangent When Using Posit Numbers and Its Application to Deep Neural Networks**  
+    In _Applications in Electronics Pervading Industry, Environment and Society_, pp. 213--221, 2020  
+    
+5.  _Cococcioni, Marco; Rossi, Federico; Ruffaldi, Emanuele; Saponara, Sergio_  
+    **Novel Arithmetics to Accelerate Machine Learning Classifiers in Autonomous Driving Applications**  
+    In _2019 26th IEEE International Conference on Electronics, Circuits and Systems (ICECS)_, pp. 779-782, 2019  
+    
+6.  _Cococcioni, Marco; Rossi, Federico; Ruffaldi, Emanuele; Saponara, Sergio_  
+    **A Novel Posit-based Fast Approximation of ELU Activation Function for Deep Neural Networks**  
+    In _2020 IEEE International Conference on Smart Computing (SMARTCOMP)_, pp. 244-246, 2020  
+    
+7.  _Cococcioni, Marco; Rossi, Federico; Ruffaldi, Emanuele; Saponara, Sergio_  
+    **Small Reals Representations for Deep Learning at the Edge: A Comparison**  
+    In _Next Generation Arithmetic_, pp. 117--133, 2022  
+    
+8.  _Neves, Nuno; Crespo, Luis; Rossi, Federico; Cococcioni, Marco; Saponara, Sergio; Kuehn, Martin; Krueger, Jens; Tomas, Pedro; Roma, Nuno_  
+    **An FPGA-based platform to evaluate Posit arithmetic in next-generation processors**  
+    In _ISC High Performance (Poster)_, 2023  
