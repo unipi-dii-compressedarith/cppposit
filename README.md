@@ -1,6 +1,8 @@
   
 # cppposit
 
+[![CMake](https://github.com/federicorossifr/cppposit/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/federicorossifr/cppposit/actions/workflows/cmake.yml)
+
 [Emanuele Ruffaldi](https://github.com/eruffaldi)
 [Federico Rossi](https://github.com/federicorossifr)
 
