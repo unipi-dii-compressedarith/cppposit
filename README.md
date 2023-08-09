@@ -18,7 +18,7 @@ Initial inspiration was the existing C++ https://github.com/libcg/bfp but then w
 Overall:
 
 - Posit's total bits from 4 to 64
-- storage in larger holfing typre (always signed in) e.g 12bit in 16bits
+- storage in larger holding type (always signed in) e.g 12bit in 16bits
 - any valid exponent bits size
 - support of variant with NaN and signed Infinity (see below)
 - implementation of operations expressed over 4 possible levels (see below)
