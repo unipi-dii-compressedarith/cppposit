@@ -576,12 +576,12 @@ namespace posit
 		constexpr operator float() const { return to_backend(); }
 		constexpr operator double() const { return to_backend(); }
 		
-		constexpr operator short int() const { return to_backend();}
+		constexpr operator short int() const { return (int)to_backend();}
 		constexpr operator int() const { return to_backend(); }
 		constexpr operator long() const { return to_backend(); }
 		constexpr operator long long int() const { return to_backend();}		
 
-		constexpr operator short unsigned int() const { return to_backend();}
+		constexpr operator short unsigned int() const { return (unsigned int)to_backend();}
 		constexpr operator unsigned int() const { return to_backend();}
 		constexpr operator long unsigned int() const { return to_backend();}		
 		constexpr operator long long unsigned int() const { return to_backend();}		

@@ -1,5 +1,9 @@
 #include "posit.h"
 
+namespace posit {
+template class Posit<int32_t, 32, 2, uint32_t, PositSpec::WithNan>;
+}
+
 float convert32(const float x) {
   posit::Posit<int32_t, 32, 2, uint32_t, posit::PositSpec::WithNan> y(x);
   const int32_t z =  *(int32_t*)&y;
