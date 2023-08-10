@@ -1,7 +1,7 @@
   
 # cppposit
 
-[![CMake](https://github.com/federicorossifr/cppposit/actions/workflows/cmake.yml/badge.svg?branch=main)](https://github.com/federicorossifr/cppposit/actions/workflows/cmake.yml)
+[![CMake](https://github.com/federicorossifr/cppposit/actions/workflows/cmake.yml/badge.svg)](https://github.com/federicorossifr/cppposit/actions/workflows/cmake.yml)
 
 [![codecov](https://codecov.io/gh/federicorossifr/cppposit/branch/main/graph/badge.svg?token=K2GHRUL9XV)](https://codecov.io/gh/federicorossifr/cppposit)
 
