@@ -84,6 +84,7 @@ TEST_CASE("Test Unpacked","[short]") {
     REQUIRE((a1).isInfinity());
     REQUIRE((pinf+pinf).isInfinity());
     REQUIRE((ninf+ninf).isInfinity());
+    REQUIRE(!(ninf).isPositive());
     REQUIRE((unan+unan).isNaN());
     REQUIRE((one-one).isZero());
     REQUIRE((zero+zero).isZero());
@@ -107,8 +108,16 @@ TEST_CASE("Test Unpacked","[short]") {
     REQUIRE(d6.isInfinity());
     REQUIRE(d7.isInfinity());
 
-    UP inf1(UP::single_tag(),0x7f800000u);
-    UP nan1(UP::single_tag(),0x7fc00000u);
+    UP inf1(UP::single_tag(),0x7f800000u), oneU(UP::single_tag(),0x3f800000);
+    UP nan1(UP::single_tag(),0x7fc00000u), twoU(UP::single_tag(),0x40000000), zeroU(UP::single_tag(),0x00000000);
+
     REQUIRE((inf1+inf1).isInfinity());
     REQUIRE((nan1+nan1).isNaN());
+    REQUIRE((float)inf1 == (float)inf1);
+    REQUIRE((float)oneU == 1.0f);
+    REQUIRE((float)twoU == 2.0f);
+    REQUIRE((double)oneU == 1.0);
+    REQUIRE((double)twoU == 2.0);
+    REQUIRE((float)zeroU == 0.f);
+    REQUIRE((double)nan1);
 }
