@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v3
+      
       - name: Configure CMAKE
         run: cmake -B ${{github.workspace}}/buildc -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
         
