@@ -8,6 +8,7 @@ FetchContent_Declare(Catch2                              # name of the content
 # make available
 FetchContent_MakeAvailable(Catch2)
 
+add_custom_target(tests)
 
 add_executable(test_init test_init.cpp)
 target_link_libraries(test_init PRIVATE Catch2::Catch2)
@@ -15,6 +16,12 @@ target_link_libraries(test_init PRIVATE Catch2::Catch2)
 add_executable(test_subnormals test_subnormals.cpp)
 target_link_libraries(test_subnormals PRIVATE Catch2::Catch2)
 
+add_executable(test_coverage test_coverage.cpp)
+target_compile_options(test_coverage PUBLIC  -fprofile-arcs -ftest-coverage -O0)
+target_link_libraries(test_coverage PRIVATE Catch2::Catch2 gcov)
+
+
+add_dependencies(tests test_init test_subnormals)
 
 add_test(
     NAME test_init
