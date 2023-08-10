@@ -65,20 +65,50 @@ TEST_CASE("Utility functions", "[short]") {
 }
 
 TEST_CASE("Test Unpacked","[short]") {
-    using P = posit::Posit<int16_t, 16, 2, uint32_t, posit::PositSpec::WithNan>;
+    using P = posit::Posit<int16_t, 16, 2, uint32_t, posit::PositSpec::WithInfs>;
     using UP = P::BackendT;
     UP uinf = UP::infinity(), pinf = UP::pinfinity(), ninf = UP::ninfinity();
     UP unan = UP::nan(), one = UP::one(), zero = UP::zero();
 
-    UP a1 = uinf+zero;
-    UP a2 = uinf+one;
+    UP a1 = uinf+zero, a3 = uinf*one;
+    UP a2 = uinf+one, a4 = uinf/one;
+    UP a5 = zero+one, a6=one+zero, a7=one*zero, a8=zero*one, a9 = uinf*zero;
+
+
+
 
     REQUIRE((uinf+uinf).isInfinity());
     REQUIRE((a2).isInfinity());
+    REQUIRE(one.isRegular());
+    REQUIRE(one.isPositive());
     REQUIRE((a1).isInfinity());
     REQUIRE((pinf+pinf).isInfinity());
     REQUIRE((ninf+ninf).isInfinity());
     REQUIRE((unan+unan).isNaN());
     REQUIRE((one-one).isZero());
     REQUIRE((zero+zero).isZero());
+    REQUIRE(a3.isInfinity());
+    REQUIRE(a4.isInfinity());
+    REQUIRE(!a5.isZero());
+    REQUIRE(!a6.isZero());
+    REQUIRE(a8.isZero());
+    REQUIRE(a7.isZero());
+    REQUIRE(a9.isNaN());
+
+    UP d1 = one/unan, d2=zero/zero, d3=zero/uinf, 
+        d4=zero/one, d5=uinf/zero, d6=one/zero,
+        d7=uinf/one;
+
+    REQUIRE(d1.isRegular());
+    REQUIRE(d2.isNaN());
+    REQUIRE(d3.isZero());
+    REQUIRE(d4.isZero());
+    REQUIRE(d5.isInfinity());
+    REQUIRE(d6.isInfinity());
+    REQUIRE(d7.isInfinity());
+
+    UP inf1(UP::single_tag(),0x7f800000u);
+    UP nan1(UP::single_tag(),0x7fc00000u);
+    REQUIRE((inf1+inf1).isInfinity());
+    REQUIRE((nan1+nan1).isNaN());
 }
