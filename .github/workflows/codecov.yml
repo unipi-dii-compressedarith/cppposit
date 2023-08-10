@@ -8,6 +8,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Build and run tests
+          run: >
+            mkdir build && cd build && cmake ..;
+            make tests;
+            ./test/test_coverage;
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:

@@ -21,7 +21,7 @@ target_compile_options(test_coverage PUBLIC  -fprofile-arcs -ftest-coverage -O0)
 target_link_libraries(test_coverage PRIVATE Catch2::Catch2 gcov)
 
 
-add_dependencies(tests test_init test_subnormals)
+add_dependencies(tests test_init test_subnormals test_coverage)
 
 add_test(
     NAME test_init
@@ -31,4 +31,9 @@ add_test(
 add_test(
     NAME test_subnormals
     COMMAND test_subnormals --success
+)
+
+add_test (
+   NAME test_coverage
+   COMMAND test_subnormals --success
 )
