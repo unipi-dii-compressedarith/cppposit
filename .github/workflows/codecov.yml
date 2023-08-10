@@ -10,7 +10,9 @@ jobs:
     steps:
       - name: Build and run tests
         run: >
-          mkdir build && cd build && cmake ..;
+          mkdir build;
+          cd build;
+          cmake ../ ;
           make tests;
           ./test/test_coverage;
       - name: Upload coverage reports to Codecov
