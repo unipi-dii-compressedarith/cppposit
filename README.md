@@ -26,6 +26,7 @@ Overall:
 - implementation of operations expressed over 4 possible levels (see below)
 - constexpr whenever possible
 - integration with Eigen
+- C++17
 
 The library supports many variants of the Posits as controlled by the template parameters:
 
