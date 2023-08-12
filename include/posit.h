@@ -276,16 +276,6 @@ namespace posit
 
 		/// Returns true if the two Posits are comparable
 	 	constexpr bool comparable(const Posit & u) const { return !(PT::withnan && (is_nan()||u.is_nan())); }
-	    
-		
-		friend constexpr bool operator == (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v == u.v; }
-	    friend constexpr bool operator == (const Posit & a, const double & d)  { return d == (double)a; }
-	    friend constexpr bool operator == (const Posit & a, const float & f)  { return f == (float)a; }
-	    friend constexpr bool operator != (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v != u.v;  }
-	    friend constexpr bool operator < (const Posit & a, const Posit & u)   { return a.comparable(u) && a.v < u.v;; }
-	    friend constexpr bool operator <= (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v <= u.v; }
-	    friend constexpr bool operator > (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v > u.v; }
-	    friend constexpr bool operator >= (const Posit & a, const Posit & u)  { return a.comparable(u) && a.v >= u.v; }
 
 	    static constexpr Posit ldexp(const Posit & u, int exp); // exponent product
 
@@ -449,31 +439,6 @@ namespace posit
 		/// @return This instance of Posit after the subtraction
 		Posit& operator-=(const Posit &a) { Posit r = *this-a; v = r.v; return *this; }
 
-		/// @brief Subtraction operator between two Posits
-		/// @param a Addend Posit
-		/// @param b Subtracting Posit
-		/// @return Subtraction of a and b
-		friend CONSTEXPR14 Posit operator-(const Posit & a, const Posit & b)  { return a + (-b); }
-
-		/// @brief Multiplication operator between two Posits
-		/// @param a multiplicand Posit
-		/// @param b multiplicand Posit
-		/// @return Multiplication of a and b
-		friend CONSTEXPR14 Posit operator*(const Posit & a, const Posit & b) 
-		{
-			return pack_posit<T,totalbits,esbits,FT,positspec>(a.to_backend()*b.to_backend());
-		}
-
-		/// @brief Fused multiply and add operation between two posits without intermediate re-packing
-		/// @param a Multiplicand posit 
-		/// @param b Multiplicand posit
-		/// @param c Accumulator posit
-		/// @return a * b + c
-		friend CONSTEXPR14 Posit fma(const Posit & a, const Posit & b, const Posit & c)
-		{
-			return pack_posit<T,totalbits,esbits,FT,positspec>(a.to_backend()*b.to_backend()+c.to_backend());
-		}
-
 		/// @brief Multiplication and assignment operator
 		/// @param a Right-hand-side Posit in the multiplication
 		/// @return This instance of Posit after the multiplication		
@@ -483,33 +448,10 @@ namespace posit
 			return *this;
 		}
 
-		/// @brief Division operator between two Posits
-		/// @param a dividend Posit
-		/// @param b divider Posit
-		/// @return Division of a and b
-		friend CONSTEXPR14 Posit operator/(const Posit & a, const Posit & b)  { 
-			return pack_posit< T,totalbits,esbits,FT,positspec> (a.to_backend()/b.to_backend()); 
-		}
-
 		/// @brief Division and assignment operator
 		/// @param a Right-hand-side Posit in the division
 		/// @return This instance of Posit after the division		
 	    Posit & operator/= (const Posit & a) { auto x = *this / a; v = x.v; return *this; }
-
-
-		/// @brief Addition operator between two Posits
-		/// @param a addend Posit
-		/// @param b addend Posit
-		/// @return Addition of a and b
-	    friend CONSTEXPR14 Posit operator+(const Posit & a, const Posit & b)
-	    {
-            auto ab = a.to_backend();
-            auto bb = b.to_backend();
-            auto rb = ab+bb;
-            auto res = pack_posit<T,totalbits,esbits,FT,positspec>(rb);
-	        return a.is_zero() ? b : b.is_zero() ? a: res;
-	    }
-
 
 		/**
 		 * @brief Returns 1/x as Level 1.
@@ -541,13 +483,6 @@ namespace posit
 		static constexpr Posit two() { return from_sraw(PT::POSIT_TWO); }
 		static constexpr Posit mone() { return from_sraw(PT::POSIT_MONE); }
 		static constexpr Posit onehalf() { return from_sraw(PT::POSIT_HALF); }
-
-
-		/**
-		 * @brief Relu Activation function (Level 1)
-		 * @return 0 for negative and not nan, otherwise identity
-		 */
-		friend Posit relu(const Posit & a) { return a.is_nan() || a.v >= 0 ? a : zero(); }
 
 		/**
 		 * @brief computes the dot product between posit values vectors	 
@@ -1020,6 +955,119 @@ namespace posit
 	{
 		return Posit<T,totalbits,esbits,FT,positspec>::from_sraw(pcabs(z.v));
 	}
+
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	constexpr bool operator == (const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & u) 
+	{
+		return a.comparable(u) && a.v == u.v;
+	}
+
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	constexpr bool operator == (const Posit<T,totalbits,esbits,FT,positspec> & a, const double & d)
+	{
+		return d == (double)a;
+	}
+
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	constexpr bool operator == (const Posit<T,totalbits,esbits,FT,positspec> & a, const float & f)  
+	{
+		return f == (float)a;
+	}
+
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	constexpr bool operator != (const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & u)  
+	{
+		return a.comparable(u) && a.v != u.v;
+	}
+
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	constexpr bool operator < (const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & u)   
+	{
+		return a.comparable(u) && a.v < u.v;
+	}
+
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	constexpr bool operator <= (const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & u)  
+	{
+		return a.comparable(u) && a.v <= u.v;
+	}
+
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	constexpr bool operator > (const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & u)  
+	{
+		return a.comparable(u) && a.v > u.v;
+	}
+
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	constexpr bool operator >= (const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & u)  
+	{
+		return a.comparable(u) && a.v >= u.v;
+	}
+
+	/// @brief Division operator between two Posits
+	/// @param a dividend Posit
+	/// @param b divider Posit
+	/// @return Division of a and b
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	CONSTEXPR14 Posit<T,totalbits,esbits,FT,positspec> operator/(const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & b)  { 
+		return pack_posit<T,totalbits,esbits,FT,positspec> (a.to_backend()/b.to_backend()); 
+	}
+
+	/// @brief Addition operator between two Posits
+	/// @param a addend Posit
+	/// @param b addend Posit
+	/// @return Addition of a and b
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+    CONSTEXPR14 Posit<T,totalbits,esbits,FT,positspec> operator+(const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & b)
+    {
+        auto ab = a.to_backend();
+        auto bb = b.to_backend();
+        auto rb = ab+bb;
+        auto res = pack_posit<T,totalbits,esbits,FT,positspec>(rb);
+        return a.is_zero() ? b : b.is_zero() ? a: res;
+    }
+
+	/// @brief Subtraction operator between two Posits
+	/// @param a Addend Posit
+	/// @param b Subtracting Posit
+	/// @return Subtraction of a and b
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	CONSTEXPR14 Posit<T,totalbits,esbits,FT,positspec> operator-(const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & b)
+	{
+		return a + (-b);
+	}
+
+	/// @brief Multiplication operator between two Posits
+	/// @param a multiplicand Posit
+	/// @param b multiplicand Posit
+	/// @return Multiplication of a and b
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	CONSTEXPR14 Posit<T,totalbits,esbits,FT,positspec> operator*(const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & b) 
+	{
+		return pack_posit<T,totalbits,esbits,FT,positspec>(a.to_backend()*b.to_backend());
+	}
+
+	/// @brief Fused multiply and add operation between two posits without intermediate re-packing
+	/// @param a Multiplicand posit 
+	/// @param b Multiplicand posit
+	/// @param c Accumulator posit
+	/// @return a * b + c
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	CONSTEXPR14 Posit<T,totalbits,esbits,FT,positspec> fma(const Posit<T,totalbits,esbits,FT,positspec> & a, const Posit<T,totalbits,esbits,FT,positspec> & b, const Posit<T,totalbits,esbits,FT,positspec> & c)
+	{
+		return pack_posit<T,totalbits,esbits,FT,positspec>(a.to_backend()*b.to_backend()+c.to_backend());
+	}
+
+	/**
+	 * @brief Relu Activation function (Level 1)
+	 * @return 0 for negative and not nan, otherwise identity
+	 */
+	template <class T,int totalbits, int esbits, class FT, PositSpec positspec>
+	Posit<T,totalbits,esbits,FT,positspec> relu(const Posit<T,totalbits,esbits,FT,positspec> & a)
+	{
+		return a.is_nan() || a.v >= 0 ? a : Posit<T,totalbits,esbits,FT,positspec>::zero();
+	}
+
 }
 
 
