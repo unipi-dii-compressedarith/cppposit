@@ -247,7 +247,7 @@ namespace posit
 		**/ 
 		template <class PT2>
 		PT2 to_posit() {
-			if constexpr(PT2::vesbits == 0 && esbits == 0) {
+			if constexpr(PT2::vesbits == esbits) {
 					using NT = typename PT2::value_t;
 					NT pt;
 					if constexpr(PT2::vtotalbits > totalbits)
